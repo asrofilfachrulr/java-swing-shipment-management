@@ -1,6 +1,7 @@
 package Model;
 
 import Helper.KeyHelper;
+import Helper.Session;
 import Model.Dao.CustomerDao;
 import Model.Dao.StaffDao;
 
@@ -14,7 +15,7 @@ public class Guest extends Account{
         return false;
     }
 
-    public void login(String username, String password, int accountType) throws Exception {
+    public LoggedAccount login(String username, String password, int accountType) throws Exception {
         System.out.printf("Password: %s%n", password);
         String hashedPw;
         try {
@@ -31,19 +32,27 @@ public class Guest extends Account{
             if(accountType == ACCOUNT_STAFF) {
                 StaffDao staffDao = new StaffDao();
                 isCorrect = staffDao.verifyLogin(username, password);
+                checkResultCompare(isCorrect);
+
+                return staffDao.getLoggedStaff(username);
             } else {
                 CustomerDao customerDao = new CustomerDao();
                 isCorrect = customerDao.verifyLogin(username, password);
-            }
+                checkResultCompare(isCorrect);
 
-            if(isCorrect){
-                System.out.println("Password is correct");
-            } else {
-                System.out.println("Password is incorrect");
-                throw new Exception("Password or Username is incorrect");
+                return customerDao.getLoggedCustomer(username);
             }
         } catch (Exception e) {
             throw new Exception(e);
+        }
+    }
+
+    private void checkResultCompare(boolean isCorrect) throws Exception {
+        if(isCorrect){
+            System.out.println("Password is correct");
+        } else {
+            System.out.println("Password is incorrect");
+            throw new Exception("Password or Username is incorrect");
         }
     }
 }

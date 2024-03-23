@@ -1,6 +1,9 @@
 package View;
 
+import Model.Customer;
 import Model.Guest;
+import Model.LoggedAccount;
+import Model.Staff;
 
 import javax.swing.*;
 import java.awt.*;
@@ -108,7 +111,20 @@ public class LoginPanel extends NavContentPanel {
 
         loadingDialog.showDialogAndRun("Logging In...", () -> {
             try {
-                guest.login(username, password, accountType);
+                LoggedAccount account = guest.login(username, password, accountType);
+                this.mainFrame.store.setAccount(account);
+                this.mainFrame.store.setAccountType(accountType);
+
+                System.out.println("Login succeed");
+                System.out.println("User data is retrieved");
+
+                if(accountType == Guest.ACCOUNT_STAFF){
+                    System.out.println(((Staff) account).toString());
+                } else {
+                    System.out.println(((Customer) account).toString());
+                }
+
+                mainFrame.changeContentPaneToHome();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
             }

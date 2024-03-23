@@ -1,14 +1,11 @@
 package View;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 public class SigninPanel extends JPanel {
     MainFrame mainFrame;
@@ -24,7 +21,8 @@ public class SigninPanel extends JPanel {
 
         JLabel label = new JLabel();
         label.setText("Welcome to Shipment Management System");
-        label.setFont(new Font(label.getFont().getName(), Font.BOLD, 18));
+        label.setFont(new Font(label.getFont().getName(), Font.BOLD, 16));
+        label.setBorder(BorderFactory.createEmptyBorder(0,0, 20, 0));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -42,11 +40,14 @@ public class SigninPanel extends JPanel {
 
         // Add register button
         JButton registerButton = new JButton("Register");
-        GridBagConstraints gbc1 = new GridBagConstraints();
 
-        gbc1.gridx = 0;
-        gbc1.gridy = 2;
-        gbc1.anchor = GridBagConstraints.CENTER;
-        add(registerButton, gbc1);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(registerButton, gbc);
+
+        JButton checkTariffButton = new JButton("Tariff Check");
+        gbc.gridy = 3;
+        add(checkTariffButton, gbc);
     }
 }

@@ -1,4 +1,5 @@
 package View;
+import Helper.GlobalStore;
 import Helper.Session;
 
 import java.awt.Container;
@@ -9,7 +10,12 @@ import javax.swing.JFrame;
 public class MainFrame extends JFrame{
     SigninPanel signinPane;
     HomePanel homePanel;
+
+    GlobalStore store;
+
     public MainFrame(){
+        store = new GlobalStore();
+
         signinPane = new SigninPanel(this);
         homePanel = new HomePanel(this);
 
@@ -40,13 +46,22 @@ public class MainFrame extends JFrame{
     }
     public void changeContentPaneToHome() {
         if(homePanel != null) {
-            if(Session.getInstance() == null) {
+            if(store.getAccount() == null) {
                 changeContentPaneToSignIn();
                 return;
             }
+            homePanel.loadComponent();
             this.setContentPane(homePanel);
             this.revalidate();
             this.repaint();
         }
+    }
+
+    public GlobalStore getStore() {
+        return store;
+    }
+
+    public void setStore(GlobalStore store) {
+        this.store = store;
     }
 }

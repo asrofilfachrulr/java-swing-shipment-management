@@ -35,4 +35,21 @@ public class Staff extends LoggedAccount{
     public void setOfficeType(String officeType) {
         this.officeType = officeType;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Staff [");
+        sb.append("email=").append(email);
+        sb.append(", phone=").append(phone);
+        sb.append(", fullname=").append(fullname);
+        sb.append(", id=").append(id);
+        sb.append(", username=").append(username);
+        sb.append(", packageManagement=").append(packageManagement); // Assuming packageManagement has a suitable toString() implementation
+        sb.append(", officeCity=").append(officeCity);
+        sb.append(", officeType=").append(officeType);
+        sb.append("]");
+        return sb.toString();
+    }
+
 }

@@ -1,19 +1,21 @@
 package Helper;
 
+import Model.LoggedAccount;
+
 public class Session {
-    private static Session instance;
+    private LoggedAccount account;
 
-    private Session(){}
+    Session(){}
 
-    public static Session getInstance() {
-        return instance;
+    public LoggedAccount getAccount() {
+        return account;
     }
 
-    public static void newInstance() {
-        instance = new Session();
+    public void setAccount(LoggedAccount acc) {
+        account = acc;
     }
 
-    public static void deleteInstance(){
-        instance = null;
+    public void deleteSession(){
+        account = null;
     }
 }
