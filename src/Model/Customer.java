@@ -1,4 +1,4 @@
-package Model.Entity;
+package Model;
 
 public class Customer {
     private int id;
@@ -23,6 +23,7 @@ public class Customer {
         this.password = password;
         this.username = username;
     }
+
 
     // Getters and setters for all fields
     public int getId() {

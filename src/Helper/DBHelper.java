@@ -12,7 +12,7 @@ public class DBHelper {
     private static String port = "3306";
 
     public static Connection getDBConnection() throws SQLException, ClassNotFoundException {
-        String connUrl = String.format("jdbc:mysql//%s:%s/%s", host, port, dbName);
+        String connUrl = String.format("jdbc:mysql://%s:%s/%s", host, port, dbName);
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(connUrl, user, pw);
     }

@@ -1,25 +1,29 @@
 package View;
 
-import Helper.KeyHelper;
-import Model.Dao.CustomerDao;
+import Model.Guest;
 
 import javax.swing.*;
 import java.awt.*;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Arrays;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class LoginPanel extends NavContentPanel {
-    public LoginPanel(MainFrame mainFrame, JPanel prevPanel){
+    JButton loginButton;
+    JRadioButton customerRB, staffRB;
+    JTextField usernameField;
+    JPasswordField passwordField;
+
+    public LoginPanel(MainFrame mainFrame, JPanel prevPanel) {
         super(mainFrame, prevPanel);
 
         contentPane.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(5, 5, 5, 5);
 
         JLabel usernameLabel = new JLabel("Username: ");
-        JTextField usernameField = new JTextField(20);
+        usernameField = new JTextField(20);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -29,7 +33,7 @@ public class LoginPanel extends NavContentPanel {
         contentPane.add(usernameField, gbc);
 
         JLabel passwordLabel = new JLabel("Password");
-        JPasswordField passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField(20);
         gbc.gridx = 0;
         gbc.gridy = 1;
         contentPane.add(passwordLabel, gbc);
@@ -41,8 +45,8 @@ public class LoginPanel extends NavContentPanel {
         gbc.gridy = 2;
         contentPane.add(loginAs, gbc);
 
-        JRadioButton customerRB = new JRadioButton("Customer", true);
-        JRadioButton staffRB = new JRadioButton("Staff");
+        customerRB = new JRadioButton("Customer", true);
+        staffRB = new JRadioButton("Staff");
         ButtonGroup btnGroup = new ButtonGroup();
         btnGroup.add(customerRB);
         btnGroup.add(staffRB);
@@ -54,36 +58,61 @@ public class LoginPanel extends NavContentPanel {
         gbc.gridx = 1;
         contentPane.add(staffRB, gbc);
 
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        loginButton.addActionListener(e -> {
-            String plainPassword = Arrays.toString(passwordField.getPassword());
-            System.out.printf("Password: %s%n", plainPassword);
-            String hashedPw;
-            try {
-                hashedPw = KeyHelper.hashSHA256(plainPassword);
-            } catch (Exception err) {
-                System.out.println(err.toString());
-                hashedPw = "";
-            }
+        contentPane.add(loginButton, gbc);
 
-            System.out.printf("EncryptedPw: %s%n%n", hashedPw);
+        setupBtnListener();
+    }
 
-            try {
-                CustomerDao customerDao = new CustomerDao();
-                boolean isCorrect = customerDao.verifyLogin(usernameField.getText(), plainPassword);
-                if(isCorrect){
-                    System.out.println("Password is correct");
+    private void setupBtnListener() {
+        loginButton.addActionListener(e -> loginButtonListener());
+
+        KeyListener enterKeyListener = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButtonListener();
                 }
-            } catch (SQLException ex) {
-                System.out.println(ex.getLocalizedMessage());
+            }
+        };
+
+        usernameField.addKeyListener(enterKeyListener);
+        passwordField.addKeyListener(enterKeyListener);
+    }
+
+    private void loginButtonListener() {
+        String username, password;
+        int accountType;
+
+        username = usernameField.getText();
+        password = new String(passwordField.getPassword());
+
+        if(username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Fill username and password", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(staffRB.isSelected()){
+            accountType = Guest.ACCOUNT_STAFF;
+        } else {
+            accountType = Guest.ACCOUNT_CUSTOMER;
+        }
+
+        Guest guest = new Guest();
+        LoadingDialog loadingDialog = new LoadingDialog();
+
+        loadingDialog.showDialogAndRun("Logging In...", () -> {
+            try {
+                guest.login(username, password, accountType);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        contentPane.add(loginButton, gbc);
     }
 }
