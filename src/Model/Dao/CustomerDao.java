@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.cj.exceptions.RSAException;
+
 public class CustomerDao {
     public Customer getLoggedCustomer(String username) throws Exception {
         Connection conn = null;
@@ -101,5 +103,40 @@ public class CustomerDao {
         }
 
         return compareResult;
+    }
+    
+    public void register(Customer customer, String password) throws SQLException {
+    	 Connection conn = null;
+         PreparedStatement stmt = null;
+         
+         try {
+        	 conn = DBHelper.getDBConnection();
+        	 
+        	 String query = "INSERT INTO customers (email,phone,fullname,return_address,password,username)"
+        	 		+ "	VALUES (?, ?, ?, ?, ?, ?);";
+        	 
+        	 stmt = conn.prepareStatement(query);
+        	 stmt.setString(1, customer.getEmail());
+        	 stmt.setString(2, customer.getPhone());
+        	 stmt.setString(3, customer.getFullname());
+        	 stmt.setString(4, customer.getReturnAddress());
+        	 stmt.setString(5, password);
+        	 stmt.setString(6, customer.getUsername());
+        	 
+        	 boolean result = stmt.execute();
+        	 
+         } catch (Exception e) {
+        	 if(e instanceof SQLException){
+                 throw new SQLException(e);
+             } else {
+                 System.out.println(e.getLocalizedMessage());
+             }
+		} finally {
+            if(stmt != null)
+                stmt.close();
+
+            if(conn != null)
+                conn.close();
+        }
     }
 }

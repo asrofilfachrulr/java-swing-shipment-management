@@ -5,14 +5,28 @@ import Helper.Session;
 import Model.Dao.CustomerDao;
 import Model.Dao.StaffDao;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 public class Guest extends Account{
     public static final int ACCOUNT_CUSTOMER = 0x33;
     public static final int ACCOUNT_STAFF = 0x99;
 
-    public boolean register(){
-        return false;
+    public void register(
+    		String username,
+    		String phone,
+    		String fullname,
+    		String email,
+    		String returnAddress,
+    		String password
+    		) throws NoSuchAlgorithmException, SQLException{
+    	
+    	Customer newCustomer = new Customer(email, phone, fullname, password, username, returnAddress, null);
+    	
+    	String hashedPassword = KeyHelper.hashSHA256(password);
+    	
+    	CustomerDao customerDao = new CustomerDao();
+    	customerDao.register(newCustomer, hashedPassword);
     }
 
     public LoggedAccount login(String username, String password, int accountType) throws Exception {

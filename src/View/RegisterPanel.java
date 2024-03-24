@@ -2,11 +2,16 @@ package View;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import Model.Guest;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
@@ -29,7 +34,7 @@ public class RegisterPanel extends JPanelInit {
 	private JTextField emailField;
 	private JTextField usernameField;
 	private JTextField fullnameField;
-	private JTextField textField;
+	private JTextField phoneField;
 	private JTextArea returnAddressTextArea;
 	private JPasswordField passwordField;
 	private JPasswordField repeatPasswordField;
@@ -49,6 +54,43 @@ public class RegisterPanel extends JPanelInit {
 		personalInfoPanel.setToolTipText("Register");
 		
 		JButton btnSave = new JButton("Save");
+		btnSave.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(!areAllFieldsFilled()) {
+					JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				if(!passwordMatch()) {
+					JOptionPane.showMessageDialog(null, "Password did not match!", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				LoadingDialog loadingDialog = new LoadingDialog();
+				
+				loadingDialog.showDialogAndRun("Loading", "Saving New Customer Data", () -> {
+					try {
+						Guest guest = new Guest();
+						guest.register(
+							usernameField.getText(),
+							phoneField.getText(),
+							fullnameField.getText(),
+							emailField.getText(),
+							returnAddressTextArea.getText(),
+							new String(passwordField.getPassword())
+						);
+					} catch (Exception err) {
+						JOptionPane.showMessageDialog(null, err.getLocalizedMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					JOptionPane.showMessageDialog(null, "Your account successfully created, please login", "Success", JOptionPane.INFORMATION_MESSAGE);
+					mainFrame.changeContentPaneToHome();
+				});
+				
+			}
+		});
 		
 		JButton btnReset = new JButton("Reset");
 		btnReset.addMouseListener(new MouseAdapter() {
@@ -171,8 +213,8 @@ public class RegisterPanel extends JPanelInit {
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("Phone");
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		phoneField = new JTextField();
+		phoneField.setColumns(10);
 		
 		JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Return Address :");
 		
@@ -193,7 +235,7 @@ public class RegisterPanel extends JPanelInit {
 								.addComponent(lblNewLabel_1_1_1_1, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
 							.addGap(29)
 							.addGroup(gl_personalInfoPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+								.addComponent(phoneField, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
 								.addComponent(emailField, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE)
 								.addComponent(fullnameField, 299, 299, 299)))
 						.addComponent(lblNewLabel_1_1_1_1_1, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
@@ -214,7 +256,7 @@ public class RegisterPanel extends JPanelInit {
 					.addGap(18)
 					.addGroup(gl_personalInfoPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1_1_1_1)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(phoneField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(lblNewLabel_1_1_1_1_1, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -234,10 +276,32 @@ public class RegisterPanel extends JPanelInit {
 		emailField.setText("");
 		usernameField.setText("");
 		fullnameField.setText("");
-		textField.setText("");
+		phoneField.setText("");
 		returnAddressTextArea.setText("");
 		
 		passwordField.setText("");
 		repeatPasswordField.setText("");
+	}
+	
+	private boolean areAllFieldsFilled() {
+		if(
+				emailField.getText().isBlank() ||
+				usernameField.getText().isBlank() ||
+				fullnameField.getText().isBlank() ||
+				phoneField.getText().isBlank()	||
+				returnAddressTextArea.getText().isBlank() ||
+				new String(passwordField.getPassword()).isBlank() ||
+				new String(repeatPasswordField.getPassword()).isBlank()
+		) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean passwordMatch() {
+		String password = new String(passwordField.getPassword());
+		String repeatPassword = new String(repeatPasswordField.getPassword());
+		return password.equals(repeatPassword);
 	}
 }
