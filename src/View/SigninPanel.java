@@ -7,7 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-public class SigninPanel extends JPanel {
+public class SigninPanel extends JPanelInit {
     MainFrame mainFrame;
     LoginPanel loginPanel;
 
@@ -50,4 +50,10 @@ public class SigninPanel extends JPanel {
         gbc.gridy = 3;
         add(checkTariffButton, gbc);
     }
+
+	@Override
+	void init() {
+		// TODO Auto-generated method stub
+		
+	}
 }

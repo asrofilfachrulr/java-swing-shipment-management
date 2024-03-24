@@ -131,4 +131,11 @@ public class LoginPanel extends NavContentPanel {
         });
 
     }
+    
+    @Override
+    public void init() {
+    	usernameField.setText("");
+    	passwordField.setText("");
+    	customerRB.setSelected(true);
+    }
 }

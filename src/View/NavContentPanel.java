@@ -5,7 +5,7 @@ import Helper.ImageHelper;
 import javax.swing.*;
 import java.awt.*;
 
-public class NavContentPanel extends JPanel {
+public class NavContentPanel extends JPanelInit {
     protected JButton backBtn;
     protected JButton homeBtn;
     protected JPanel navPane = new JPanel();
@@ -47,7 +47,13 @@ public class NavContentPanel extends JPanel {
 
     protected void setBackBtnAction(){
         if(prevPanel != null) {
-            backBtn.addActionListener(e -> mainFrame.changeContentPane(prevPanel));
+            backBtn.addActionListener(e -> mainFrame.changeContentPaneWithoutInit(prevPanel));
         }
     }
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
 }

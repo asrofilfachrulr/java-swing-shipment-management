@@ -2,10 +2,11 @@ package View;
 import Helper.GlobalStore;
 import Helper.Session;
 
-import java.awt.Container;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class MainFrame extends JFrame{
     SigninPanel signinPane;
@@ -29,32 +30,43 @@ public class MainFrame extends JFrame{
         setLayout(null);
         setContentPane(signinPane);
         setIconImage(icon.getImage());
+        setResizable(false);
+        setMinimumSize(new Dimension(600, 600));
     }
 
-    public void changeContentPane(Container pane) {
+    public void changeContentPane(JPanelInit pane) {
+    	pane.init();
         this.setContentPane(pane);
-        this.revalidate();
-        this.repaint();
+        reloadFrame();
+    }
+    
+    public void changeContentPaneWithoutInit(JPanel pane) {
+    	this.setContentPane(pane);
+    	reloadFrame();
     }
 
     public void changeContentPaneToSignIn() {
-        if(signinPane != null) {
-            this.setContentPane(signinPane);
-            this.revalidate();
-            this.repaint();
+        if(signinPane == null) {
+        	signinPane = new SigninPanel(this);
         }
+        changeContentPaneWithoutInit(signinPane);
     }
+    
     public void changeContentPaneToHome() {
         if(homePanel != null) {
             if(store.getAccount() == null) {
                 changeContentPaneToSignIn();
                 return;
             }
-            homePanel.loadComponent();
-            this.setContentPane(homePanel);
-            this.revalidate();
-            this.repaint();
+            if(homePanel == null)
+            	homePanel = new HomePanel(this);
+            changeContentPane(homePanel);
         }
+    }
+    
+    public void reloadFrame() {
+    	this.revalidate();
+        this.repaint();
     }
 
     public GlobalStore getStore() {
