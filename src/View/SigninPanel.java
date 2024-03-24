@@ -9,11 +9,12 @@ import java.awt.Insets;
 
 public class SigninPanel extends JPanelInit {
     MainFrame mainFrame;
-    LoginPanel loginPanel;
-
+    
     SigninPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        loginPanel = new LoginPanel(mainFrame, this);
+        LoginPanel loginPanel = new LoginPanel(mainFrame, this);
+        RegisterPanel registerPanel = new RegisterPanel(mainFrame, this);
+        
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,6 +41,7 @@ public class SigninPanel extends JPanelInit {
 
         // Add register button
         JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(e -> mainFrame.changeContentPane(registerPanel));
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -52,7 +54,7 @@ public class SigninPanel extends JPanelInit {
     }
 
 	@Override
-	void init() {
+	public void init() {
 		// TODO Auto-generated method stub
 		
 	}
