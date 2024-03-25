@@ -16,10 +16,13 @@ import java.awt.event.MouseEvent;
 public class HomePanel extends JPanelInit {
     MainFrame mainFrame;
     JLabel lbUsername;
+    TariffCheckPanel tariffCheckPanel;
 
     HomePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(null);
+        
+        tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
         
         JLabel lblNewLabel = new JLabel("Welcome,");
         lblNewLabel.setBounds(28, 32, 57, 14);
@@ -47,10 +50,7 @@ public class HomePanel extends JPanelInit {
         sl_panel.putConstraint(SpringLayout.WEST, btnTariffCheck, 71, SpringLayout.WEST, panel);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnTariffCheck, 126, SpringLayout.NORTH, panel);
         sl_panel.putConstraint(SpringLayout.EAST, btnTariffCheck, 202, SpringLayout.WEST, panel);
-        btnTariffCheck.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
-        });
+        btnTariffCheck.addActionListener(e -> mainFrame.changeContentPane(tariffCheckPanel));
         panel.add(btnTariffCheck);
         
         JButton btnAddRequest = new JButton("Add Request");

@@ -9,11 +9,16 @@ import java.awt.Insets;
 
 public class SigninPanel extends JPanelInit {
     MainFrame mainFrame;
+    LoginPanel loginPanel;
+    RegisterPanel registerPanel;
+    TariffCheckPanel tariffCheckPanel;
+    
     
     SigninPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        LoginPanel loginPanel = new LoginPanel(mainFrame, this);
-        RegisterPanel registerPanel = new RegisterPanel(mainFrame, this);
+        loginPanel = new LoginPanel(mainFrame, this);
+        registerPanel = new RegisterPanel(mainFrame, this);
+        tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
         
 
         setLayout(new GridBagLayout());
@@ -49,6 +54,7 @@ public class SigninPanel extends JPanelInit {
         add(registerButton, gbc);
 
         JButton checkTariffButton = new JButton("Tariff Check");
+        checkTariffButton.addActionListener(e -> mainFrame.changeContentPane(tariffCheckPanel));
         gbc.gridy = 3;
         add(checkTariffButton, gbc);
     }
