@@ -1,34 +1,15 @@
 package View;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JPanel;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 
 import Model.Guest;
 
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
-import javax.swing.border.TitledBorder;
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EtchedBorder;
-import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
-import javax.swing.JPasswordField;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class RegisterPanel extends JPanelInit {
 	private JTextField emailField;

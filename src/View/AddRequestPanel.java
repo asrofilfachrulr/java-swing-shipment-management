@@ -2,11 +2,23 @@ package View;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
+
+import Model.Account;
+import Model.City;
+import Model.Dao.CityDao;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -20,14 +32,22 @@ import javax.swing.JButton;
 public class AddRequestPanel extends NavContentPanel {
 	private JTextField senderPhoneTF;
 	private JTextField senderNameTF;
+	private JTextArea senderAddressTA;
 	private JTextField recipientPhoneTF;
 	private JTextField recipientNameTF;
+	private JTextArea recipientAddressTA;
 	private JTextField weightTF;
 	private JTextField descTF;
+	private JComboBox originCBx;
+	private JComboBox destCBx;
+	private JCheckBox fragileChBx;
+	private JTextArea tariffTA;
+	
+	private HashMap<String, City> nameCityHashMap = new HashMap<String, City>();
 	
 	public AddRequestPanel(MainFrame mainFrame, JPanel prevJPanel) {
 		super(mainFrame, prevJPanel);
-		contentPane.setBounds(0, 50, 600, 550);
+		contentPane.setBounds(0, 50, 600, 554);
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Add Delivery Request");
@@ -38,7 +58,7 @@ public class AddRequestPanel extends NavContentPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(10, 40, 569, 500);
+		scrollPane.setBounds(10, 40, 569, 488);
 		contentPane.add(scrollPane);
 		
 		JPanel panel = new JPanel();
@@ -62,7 +82,7 @@ public class AddRequestPanel extends NavContentPanel {
 		senderNameTF = new JTextField();
 		senderNameTF.setColumns(10);
 		
-		JTextArea senderAddressTA = new JTextArea();
+		senderAddressTA = new JTextArea();
 		senderAddressTA.setWrapStyleWord(true);
 		senderAddressTA.setRows(3);
 		
@@ -75,7 +95,7 @@ public class AddRequestPanel extends NavContentPanel {
 		
 		JLabel lblNewLabel_2_2 = new JLabel("Name");
 		
-		JTextArea recipientAddressTA = new JTextArea();
+		recipientAddressTA = new JTextArea();
 		
 		recipientPhoneTF = new JTextField();
 		recipientPhoneTF.setColumns(10);
@@ -155,17 +175,21 @@ public class AddRequestPanel extends NavContentPanel {
 		JLabel lblNewLabel_3 = new JLabel("Tariff: ");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		JTextArea tariffTA = new JTextArea();
+		tariffTA = new JTextArea();
 		tariffTA.setText("Rp. ");
 		tariffTA.setFont(new Font("Arial", Font.BOLD, 13));
 		tariffTA.setEditable(false);
 		
 		JButton btnSubmit = new JButton("SUBMIT");
 		btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnSubmit.addActionListener(e -> submit());
 		
 		JButton btnCalculate = new JButton("Calculate");
+		btnCalculate.addActionListener(e -> calculate());
 		
 		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(e -> resetFields());
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -226,15 +250,15 @@ public class AddRequestPanel extends NavContentPanel {
 		descTF = new JTextField();
 		descTF.setColumns(10);
 		
-		JComboBox originCBx = new JComboBox();
+		originCBx = new JComboBox();
 		
 		JLabel lblNewLabel_2_3_2_1 = new JLabel("Origin");
 		
 		JLabel lblNewLabel_2_3_2_1_1 = new JLabel("Destination");
 		
-		JComboBox destCBx = new JComboBox();
+		destCBx = new JComboBox();
 		
-		JCheckBox fragileChBx = new JCheckBox("   Fragile");
+		fragileChBx = new JCheckBox("   Fragile");
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -289,9 +313,142 @@ public class AddRequestPanel extends NavContentPanel {
 		panel.setLayout(gl_panel);
 	}
 
+	private void submit() {
+		if(!checkFields()) {
+			JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		calculate();
+		
+		String cost = tariffTA.getText();
+		
+		String msg = String.format("Your request has cost: %s.\nDo you want to proceed?", cost);
+		
+		int choice = JOptionPane.showConfirmDialog(null, msg, "Submit Confirmation", JOptionPane.YES_NO_OPTION);
+		
+		if(choice == JOptionPane.NO_OPTION) {
+			return;
+		}
+		
+		
+	}
+
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
+		nameCityHashMap = new HashMap<String, City>();
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Loading Cities", "Retrieving data from Database", () -> {
+			CityDao cityDao = new CityDao();
+			List<City> cities;
+			try {
+				cities = cityDao.getCitiesAndId();
+			} catch (Exception e) {
+				System.out.println(e.getLocalizedMessage());
+				JOptionPane.showMessageDialog(null, "Failed to retrieved data from database", "Error",  JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			if(cities.size() < 1) {
+				JOptionPane.showMessageDialog(null, "City data is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			for(City c: cities) {
+				nameCityHashMap.put(c.getName(), c);
+			}
+			
+			Set<String> cityNames = nameCityHashMap.keySet();
+			
+			DefaultComboBoxModel<String> originComboBoxModel = new DefaultComboBoxModel<>();
+			DefaultComboBoxModel<String> destComboBoxModel = new DefaultComboBoxModel<>();
+			
+			originComboBoxModel.addAll(cityNames);
+			destComboBoxModel.addAll(cityNames);
+			
+			originCBx.setModel(originComboBoxModel);
+			destCBx.setModel(destComboBoxModel);
+		
+			resetFields();
+		});
+	}
+	
+	private void resetFields() {
+		senderPhoneTF.setText("");
+		senderNameTF.setText("");
+		senderAddressTA.setText("");
+		recipientPhoneTF.setText("");
+		recipientNameTF.setText("");
+		recipientAddressTA.setText("");
+		weightTF.setText("");
+		descTF.setText("");
+		fragileChBx.setSelected(false);
+		tariffTA.setText("Rp. ");
+		
+		originCBx.setSelectedIndex(0);
+		destCBx.setSelectedIndex(1);
+	}
+	
+	private void calculate() {
+		try {
+			if(!checkCalculateFields()) {
+				JOptionPane.showMessageDialog(null, "All Fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		
+		} catch (Exception ignored) {
+			JOptionPane.showMessageDialog(null, "Weight must be a number!", "Type Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+			
+		City origCity = nameCityHashMap.get((String)originCBx.getSelectedItem());
+		City destCity = nameCityHashMap.get((String)destCBx.getSelectedItem());
+		
+		float weight = Float.parseFloat(weightTF.getText());
+		
+		float cost = Account.tariffCheck(origCity.getMetric(), destCity.getMetric(), weight, fragileChBx.isSelected());
+				
+		tariffTA.setText(String.format("Rp. %.2f", cost));
+	}
+	
+	private boolean checkFields() {
+		try {
+			if(checkCalculateFields()) {
+				if(
+					senderNameTF.getText().isBlank() ||
+					senderAddressTA.getText().isBlank() ||
+					senderPhoneTF.getText().isBlank() ||
+					recipientNameTF.getText().isBlank() ||
+					recipientPhoneTF.getText().isBlank() ||
+					recipientAddressTA.getText().isBlank() ||
+					descTF.getText().isBlank() 
+				)
+					return false;
+			}
+			else
+				return false;
+				
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean checkCalculateFields() throws Exception {
+		String weight = weightTF.getText();
+		
+		if(weight.isBlank()) {
+			return false;
+		}
+		
+		try {
+			Float.parseFloat(weight);	
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+		
+		return true;
 		
 	}
 }

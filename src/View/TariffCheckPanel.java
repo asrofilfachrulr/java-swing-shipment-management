@@ -149,12 +149,12 @@ public class TariffCheckPanel extends NavContentPanel {
 				cities = cityDao.getCitiesAndId();
 			} catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
-				JOptionPane.showMessageDialog(null, "Error", "Failed to retrieved data from database", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Failed to retrieved data from database", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
 			if(cities.size() < 1) {
-				JOptionPane.showMessageDialog(null, "Error", "City data is empty!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "City data is empty!", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
@@ -188,12 +188,12 @@ public class TariffCheckPanel extends NavContentPanel {
 	private void calculate() {
 		try {
 			if(!checkFields()) {
-				JOptionPane.showMessageDialog(null, "Error", "All Fields must be filled!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "All Fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		
 		} catch (Exception ignored) {
-			JOptionPane.showMessageDialog(null, "Error Type", "Weight must be a number!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Weight must be a number!", "Type Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 			
