@@ -21,7 +21,7 @@ public class Guest extends Account{
     		String password
     		) throws NoSuchAlgorithmException, SQLException{
     	
-    	Customer newCustomer = new Customer(email, phone, fullname, password, username, returnAddress, null);
+    	Customer newCustomer = new Customer(email, phone, fullname, 0, username, returnAddress, null);
     	
     	String hashedPassword = KeyHelper.hashSHA256(password);
     	
