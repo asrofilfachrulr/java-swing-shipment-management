@@ -5,7 +5,7 @@ public class Staff extends LoggedAccount{
     private String officeCity;
     private String officeType;
 
-    public Staff(String email, String phone, String fullname, String id, String username, StaffPackageManagement packageManagement, String officeCity, String officeType) {
+    public Staff(String email, String phone, String fullname, int id, String username, StaffPackageManagement packageManagement, String officeCity, String officeType) {
         super(email, phone, fullname, id, username);
         this.packageManagement = packageManagement;
         this.officeCity = officeCity;

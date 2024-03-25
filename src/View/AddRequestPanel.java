@@ -5,6 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +18,9 @@ import javax.swing.border.TitledBorder;
 
 import Model.Account;
 import Model.City;
+import Model.DeliveryRequest;
 import Model.Dao.CityDao;
+import Model.Dao.DeliveryRequestDao;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -185,7 +189,7 @@ public class AddRequestPanel extends NavContentPanel {
 		btnSubmit.addActionListener(e -> submit());
 		
 		JButton btnCalculate = new JButton("Calculate");
-		btnCalculate.addActionListener(e -> calculate());
+		btnCalculate.addActionListener(e -> calculateAndSet());
 		
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(e -> resetFields());
@@ -319,11 +323,10 @@ public class AddRequestPanel extends NavContentPanel {
 			return;
 		}
 		
-		calculate();
+		float cost = calculateCost();
+		tariffTA.setText(String.format("Rp. %.2f", cost));
 		
-		String cost = tariffTA.getText();
-		
-		String msg = String.format("Your request has cost: %s.\nDo you want to proceed?", cost);
+		String msg = String.format("Your request has cost: Rp. %.2f.\nDo you want to proceed?", cost);
 		
 		int choice = JOptionPane.showConfirmDialog(null, msg, "Submit Confirmation", JOptionPane.YES_NO_OPTION);
 		
@@ -331,7 +334,49 @@ public class AddRequestPanel extends NavContentPanel {
 			return;
 		}
 		
+		String senderName, senderPhone, senderAddress;
+		String recipientName, recipientPhone, recipientAddress;
+		String description;
+		boolean isFragile;
+		City cityOrigin, cityDest;
+		float weight;
 		
+		senderName = senderNameTF.getText();
+		senderPhone = senderPhoneTF.getText();
+		senderAddress = senderAddressTA.getText();
+		recipientName = recipientNameTF.getText();
+		recipientPhone = recipientPhoneTF.getText();
+		recipientAddress = recipientAddressTA.getText();
+		weight = Float.parseFloat(weightTF.getText());
+		isFragile = fragileChBx.isSelected();
+		description = descTF.getText();
+		
+		cityOrigin = nameCityHashMap.get((String)originCBx.getSelectedItem());
+		cityDest = nameCityHashMap.get((String)destCBx.getSelectedItem());
+		
+		DeliveryRequest request = new DeliveryRequest(
+			senderName, senderPhone, senderAddress,
+			recipientName, recipientPhone, recipientAddress,
+			weight, isFragile, description, cost, new Date(),
+			cityOrigin, cityDest
+		);
+		
+		request.setCustomerId(mainFrame.getStore().getAccount().getId());
+		System.out.println(request.toString());
+		
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Submitting", "Submitting Your Deliver Request...", () ->{
+			DeliveryRequestDao dao = new DeliveryRequestDao();
+			try {
+				dao.add(request);
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			JOptionPane.showMessageDialog(null, "Your request have been submitted successfully.\nNow back to Home", "Success",  JOptionPane.INFORMATION_MESSAGE);
+			mainFrame.changeContentPaneToHome();
+		});
 	}
 
 	@Override
@@ -389,16 +434,16 @@ public class AddRequestPanel extends NavContentPanel {
 		destCBx.setSelectedIndex(1);
 	}
 	
-	private void calculate() {
+	private float calculateCost() {
 		try {
 			if(!checkCalculateFields()) {
 				JOptionPane.showMessageDialog(null, "All Fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
-				return;
+				return 0f;
 			}
 		
 		} catch (Exception ignored) {
 			JOptionPane.showMessageDialog(null, "Weight must be a number!", "Type Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return 0f;
 		}
 			
 		City origCity = nameCityHashMap.get((String)originCBx.getSelectedItem());
@@ -407,7 +452,12 @@ public class AddRequestPanel extends NavContentPanel {
 		float weight = Float.parseFloat(weightTF.getText());
 		
 		float cost = Account.tariffCheck(origCity.getMetric(), destCity.getMetric(), weight, fragileChBx.isSelected());
-				
+		
+		return cost;
+	}
+	
+	private void calculateAndSet() {
+		float cost = calculateCost();
 		tariffTA.setText(String.format("Rp. %.2f", cost));
 	}
 	

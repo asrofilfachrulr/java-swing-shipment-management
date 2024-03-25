@@ -8,10 +8,10 @@ public abstract class BasePackageInformation {
     protected String recipientPhone;
     protected String recipientAddress;
     protected float weight;
-    protected String type;
-    protected String stuffDesc;
+    protected boolean isFragile;
+    protected String description;
 
-    protected BasePackageInformation(String senderName, String senderPhone, String senderAddress, String recipientName, String recipientPhone, String recipientAddress, float weight, String type, String stuffDesc) {
+    protected BasePackageInformation(String senderName, String senderPhone, String senderAddress, String recipientName, String recipientPhone, String recipientAddress, float weight, boolean isFragile, String stuffDesc) {
         this.senderName = senderName;
         this.senderPhone = senderPhone;
         this.senderAddress = senderAddress;
@@ -19,8 +19,8 @@ public abstract class BasePackageInformation {
         this.recipientPhone = recipientPhone;
         this.recipientAddress = recipientAddress;
         this.weight = weight;
-        this.type = type;
-        this.stuffDesc = stuffDesc;
+        this.isFragile = isFragile;
+        this.description = stuffDesc;
     }
 
     public String getSenderName() {
@@ -79,19 +79,19 @@ public abstract class BasePackageInformation {
         this.weight = weight;
     }
 
-    public String getType() {
-        return type;
-    }
+   public void setIsFragile(boolean isFragile) {
+	   this.isFragile = isFragile;
+   }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
+   public boolean getIsFragile() {
+	   return this.isFragile;
+   }
+   
     public String getStuffDesc() {
-        return stuffDesc;
+        return description;
     }
 
     public void setStuffDesc(String stuffDesc) {
-        this.stuffDesc = stuffDesc;
+        this.description = stuffDesc;
     }
 }

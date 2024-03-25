@@ -70,10 +70,11 @@ public class StaffDao {
 
             rs = stmt.executeQuery();
             if(rs.next()){
-                String id, email, phone, fullname, username1, officeType, officeCity;
+                String email, phone, fullname, username1, officeType, officeCity;
+                int id;
                 StaffPackageManagement staffPackageManagement = new StaffPackageManagement();
 
-                id = rs.getString("id");
+                id = rs.getInt("id");
                 email = rs.getString("email");
                 phone = rs.getString("phone");
                 fullname = rs.getString("fullname");

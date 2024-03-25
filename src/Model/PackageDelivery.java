@@ -6,8 +6,8 @@ public class PackageDelivery extends BasePackageInformation{
     private String status;
     private List<PackageHistory> packageHistories;
 
-    public PackageDelivery(String senderName, String senderPhone, String senderAddress, String recipientName, String recipientPhone, String recipientAddress, float weight, String type, String stuffDesc, String status, List<PackageHistory> packageHistories) {
-        super(senderName, senderPhone, senderAddress, recipientName, recipientPhone, recipientAddress, weight, type, stuffDesc);
+    public PackageDelivery(String senderName, String senderPhone, String senderAddress, String recipientName, String recipientPhone, String recipientAddress, float weight, boolean isFragile, String stuffDesc, String status, List<PackageHistory> packageHistories) {
+        super(senderName, senderPhone, senderAddress, recipientName, recipientPhone, recipientAddress, weight, isFragile, stuffDesc);
         this.status = status;
         this.packageHistories = packageHistories;
     }

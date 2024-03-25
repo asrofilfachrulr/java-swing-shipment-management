@@ -4,10 +4,10 @@ public abstract class LoggedAccount extends Account {
     protected String email;
     protected String phone;
     protected String fullname;
-    protected String id;
+    protected int id;
     protected String username;
 
-    protected LoggedAccount(String email, String phone, String fullname, String id, String username) {
+    protected LoggedAccount(String email, String phone, String fullname, int id, String username) {
         this.email = email;
         this.phone = phone;
         this.fullname = fullname;
@@ -39,11 +39,11 @@ public abstract class LoggedAccount extends Account {
         this.fullname = fullname;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -27,10 +27,11 @@ public class CustomerDao {
 
             rs = stmt.executeQuery();
             if(rs.next()){
-                String id, email, phone, fullname, returnAddress, username1;
+                String email, phone, fullname, returnAddress, username1;
+                int id;
                 CustomerPackageManagement customerPackageManagement = new CustomerPackageManagement();
 
-                id = rs.getString("id");
+                id = rs.getInt("id");
                 email = rs.getString("email");
                 phone = rs.getString("phone");
                 fullname = rs.getString("fullname");
