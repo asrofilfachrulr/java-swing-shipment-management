@@ -51,12 +51,12 @@ public class NavContentPanel extends JPanelInit {
         );
         gl_navPane.setVerticalGroup(
         	gl_navPane.createParallelGroup(Alignment.LEADING)
-        		.addGroup(gl_navPane.createSequentialGroup()
-        			.addGap(5)
-        			.addGroup(gl_navPane.createParallelGroup(Alignment.LEADING)
-        				.addComponent(homeBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-        				.addComponent(backBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        			.addContainerGap())
+        		.addGroup(Alignment.TRAILING, gl_navPane.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(gl_navPane.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(homeBtn, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+        				.addComponent(backBtn, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
+        			.addGap(5))
         );
         navPane.setLayout(gl_navPane);
         add(contentPane);
