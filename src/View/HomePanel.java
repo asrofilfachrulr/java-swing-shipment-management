@@ -17,12 +17,14 @@ public class HomePanel extends JPanelInit {
     MainFrame mainFrame;
     JLabel lbUsername;
     TariffCheckPanel tariffCheckPanel;
+    AddRequestPanel addRequestPanel;
 
     HomePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(null);
         
         tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
+        addRequestPanel = new AddRequestPanel(mainFrame, this);
         
         JLabel lblNewLabel = new JLabel("Welcome,");
         lblNewLabel.setBounds(28, 32, 57, 14);
@@ -58,6 +60,7 @@ public class HomePanel extends JPanelInit {
         sl_panel.putConstraint(SpringLayout.WEST, btnAddRequest, -210, SpringLayout.EAST, panel);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnAddRequest, -356, SpringLayout.SOUTH, panel);
         sl_panel.putConstraint(SpringLayout.EAST, btnAddRequest, -79, SpringLayout.EAST, panel);
+        btnAddRequest.addActionListener(e -> mainFrame.changeContentPane(addRequestPanel));
         panel.add(btnAddRequest);
         
         JButton btnRequestsList = new JButton("Requests List");

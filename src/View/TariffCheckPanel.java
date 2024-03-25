@@ -13,6 +13,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.TitledBorder;
 
+import Model.Account;
 import Model.City;
 import Model.Dao.CityDao;
 
@@ -196,21 +197,13 @@ public class TariffCheckPanel extends NavContentPanel {
 			return;
 		}
 			
-		int basePrice = 3000;
-		int pricePerMetric = 2000;
-		int pricePerKg = 2000;
-		int priceFragileStuff = 10000;
-		
 		City origCity = nameCityHashMap.get((String)originCityCB.getSelectedItem());
 		City destCity = nameCityHashMap.get((String)destinationCityRB.getSelectedItem());
 		
-		int diffMetric = Math.abs(origCity.getMetric() - destCity.getMetric());
-		
 		float weight = Float.parseFloat(weightTextField.getText());
-		int weightRounded = Math.round(weight);
 		
-		float cost = basePrice + diffMetric * pricePerMetric + weightRounded * pricePerKg + (fragileCheckbox.isSelected() ? priceFragileStuff : 0);
-		
+		float cost = Account.tariffCheck(origCity.getMetric(), destCity.getMetric(), weight, fragileCheckbox.isSelected());
+				
 		tariffTextArea.setText(String.format("Rp. %.2f", cost));
 	}
 	
