@@ -1,38 +1,26 @@
 package Model;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import Model.Dao.DeliveryRequestDao;
 
-public class CustomerPackageManagement implements PackageDeliveryManagement{
-    private List<PackageDelivery> packageDeliveries;
-    private List<DeliveryRequest> deliveryRequests;
+public class CustomerPackageManagement extends PackageManagement{
+    private List<PackageDelivery> packageDeliveries = new ArrayList<>();
+    private List<DeliveryRequest> deliveryRequests = new ArrayList<>();
+    
+    public List<DeliveryRequest> getDeliveryRequests() {
+		return deliveryRequests;
+	}
+
+	private int userId;
 
     public CustomerPackageManagement(){}
 
-    public CustomerPackageManagement(List<PackageDelivery> packageDeliveries, List<DeliveryRequest> deliveryRequests) {
-        this.packageDeliveries = packageDeliveries;
-        this.deliveryRequests = deliveryRequests;
+    public CustomerPackageManagement(int userId) {
+    	this.userId = userId;
     }
-
-    @Override
-    public PackageDelivery searchPackageDeliveryById(String id) {
-        return null;
-    }
-
-    @Override
-    public DeliveryRequest searchDeliveryRequestById(String id) {
-        return null;
-    }
-
-    @Override
-    public List<PackageDelivery> searchPackageDeliveriesByOwner(String ownerId) {
-        return null;
-    }
-
-    @Override
-    public List<DeliveryRequest> searchDeliveryRequestsByOwner(String ownerId) {
-        return null;
-    }
-
+    
     public List<PackageDelivery> getPackageDeliveries() {
         return packageDeliveries;
     }
@@ -41,16 +29,24 @@ public class CustomerPackageManagement implements PackageDeliveryManagement{
         this.packageDeliveries = packageDeliveries;
     }
 
-    public List<DeliveryRequest> getDeliveryRequests() {
-        return deliveryRequests;
+    public List<DeliveryRequest> fetchDeliveryRequests() throws Exception {
+    	if(deliveryRequests.size() != 0) {
+    		return this.getDeliveryRequests();
+    	}
+    	
+    	List<DeliveryRequest> requests = searchDeliveryRequestsByOwner(this.userId);
+    	this.setDeliveryRequests(requests);
+    	
+        return requests;
     }
 
     public void setDeliveryRequests(List<DeliveryRequest> deliveryRequests) {
         this.deliveryRequests = deliveryRequests;
     }
 
-    public void createDeliveryRequest(DeliveryRequest deliveryRequest) {
-
+    public void createDeliveryRequest(DeliveryRequest deliveryRequest) throws SQLException {
+    	DeliveryRequestDao dao = new DeliveryRequestDao();
+    	dao.add(deliveryRequest);
     }
 
     public void payDeliveryRequest(){
@@ -60,4 +56,12 @@ public class CustomerPackageManagement implements PackageDeliveryManagement{
     public void cancelDeliveryRequest(){
 
     }
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 }

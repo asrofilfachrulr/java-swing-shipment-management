@@ -18,6 +18,7 @@ import javax.swing.border.TitledBorder;
 
 import Model.Account;
 import Model.City;
+import Model.Customer;
 import Model.DeliveryRequest;
 import Model.Dao.CityDao;
 import Model.Dao.DeliveryRequestDao;
@@ -366,9 +367,11 @@ public class AddRequestPanel extends NavContentPanel {
 		
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Submitting", "Submitting Your Deliver Request...", () ->{
-			DeliveryRequestDao dao = new DeliveryRequestDao();
 			try {
-				dao.add(request);
+				((Customer) mainFrame.getStore()
+					.getAccount())
+					.getPackageManagement()
+					.createDeliveryRequest(request);
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
 				return;

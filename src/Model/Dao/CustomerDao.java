@@ -29,7 +29,7 @@ public class CustomerDao {
             if(rs.next()){
                 String email, phone, fullname, returnAddress, username1;
                 int id;
-                CustomerPackageManagement customerPackageManagement = new CustomerPackageManagement();
+                
 
                 id = rs.getInt("id");
                 email = rs.getString("email");
@@ -37,6 +37,8 @@ public class CustomerDao {
                 fullname = rs.getString("fullname");
                 returnAddress = rs.getString("return_address");
                 username1 = rs.getString("username");
+                
+                CustomerPackageManagement customerPackageManagement = new CustomerPackageManagement(id);
 
                 customer = new Customer(
                         email,

@@ -70,7 +70,6 @@ public class TariffCheckPanel extends NavContentPanel {
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 446, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -78,18 +77,18 @@ public class TariffCheckPanel extends NavContentPanel {
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblNewLabel_1)
-								.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1_1_1))
+								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(lblNewLabel_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblNewLabel_1_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 							.addGap(44)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(originCityCB, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
 								.addComponent(weightTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(destinationCityRB, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(154, Short.MAX_VALUE))
+					.addContainerGap(142, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 250, Short.MAX_VALUE)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(28)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
@@ -103,7 +102,7 @@ public class TariffCheckPanel extends NavContentPanel {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_1_1_1)
 						.addComponent(destinationCityRB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
 					.addComponent(fragileCheckbox)
 					.addGap(32))
 		);

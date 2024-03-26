@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `cities`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cities` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `metric` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,13 +52,13 @@ CREATE TABLE `customers` (
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `fullname` varchar(100) DEFAULT NULL,
-  `return_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `return_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `customers_unique` (`username`),
   UNIQUE KEY `customers_unique_1` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ CREATE TABLE `delivery_requests` (
   `recipient_address` varchar(255) DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `is_fragile` tinyint(1) DEFAULT '0',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cost` float DEFAULT NULL,
   `request_time` datetime DEFAULT NULL,
   `customer_id` int NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE `delivery_requests` (
   CONSTRAINT `delivery_requests_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
   CONSTRAINT `delivery_requests_ibfk_2` FOREIGN KEY (`city_origin_id`) REFERENCES `cities` (`id`),
   CONSTRAINT `delivery_requests_ibfk_3` FOREIGN KEY (`city_dest_id`) REFERENCES `cities` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +128,7 @@ CREATE TABLE `office_types` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `package_deliveries` (
   KEY `package_deliveries_staff_FK` (`staff_id`),
   CONSTRAINT `package_deliveries_delivery_requests_FK` FOREIGN KEY (`delivery_req_id`) REFERENCES `delivery_requests` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `package_deliveries_staff_FK` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +190,7 @@ CREATE TABLE `package_histories` (
   KEY `package_histories_staff_FK` (`staff_id`),
   CONSTRAINT `package_histories_ibfk_1` FOREIGN KEY (`package_delivery_id`) REFERENCES `package_deliveries` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `package_histories_staff_FK` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,7 +212,7 @@ DROP TABLE IF EXISTS `staff`;
 CREATE TABLE `staff` (
   `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '-',
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '-',
   `fullname` varchar(100) DEFAULT NULL,
   `office_city_id` int DEFAULT NULL,
   `office_type_id` int DEFAULT NULL,
@@ -224,7 +224,7 @@ CREATE TABLE `staff` (
   KEY `staff_office_types_FK` (`office_type_id`),
   CONSTRAINT `staff_cities_FK` FOREIGN KEY (`office_city_id`) REFERENCES `cities` (`id`),
   CONSTRAINT `staff_office_types_FK` FOREIGN KEY (`office_type_id`) REFERENCES `office_types` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
