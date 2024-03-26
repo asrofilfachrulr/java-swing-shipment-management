@@ -48,9 +48,10 @@ public class CustomerPackageManagement extends PackageManagement{
     	DeliveryRequestDao dao = new DeliveryRequestDao();
     	dao.add(deliveryRequest);
     }
-
-    public void payDeliveryRequest(){
-
+    
+    public List<DeliveryRequest> refreshAndFetchDeliveryRequests() throws Exception {
+    	deliveryRequests = new ArrayList<>();
+    	return fetchDeliveryRequests();
     }
 
     public void cancelDeliveryRequest(){

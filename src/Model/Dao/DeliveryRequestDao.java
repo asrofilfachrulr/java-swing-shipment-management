@@ -73,12 +73,13 @@ public class DeliveryRequestDao {
 		try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "select dr.*, c.name origin_name, c.metric origin_metric, c2.name dest_name, c2.metric dest_metric from delivery_requests dr \r\n"
-					+ "	join cities c\r\n"
-					+ "	on dr.city_origin_id =  c.id \r\n"
-					+ "	join cities c2 \r\n"
-					+ "	on dr.city_dest_id = c2.id\r\n"
-					+ "	where customer_id = ?;";
+			String query = "SELECT dr.*, c.name AS origin_name, c.metric AS origin_metric, c2.name AS dest_name, c2.metric AS dest_metric " +
+		               "FROM delivery_requests dr " +
+		               "JOIN cities c ON dr.city_origin_id = c.id " +
+		               "JOIN cities c2 ON dr.city_dest_id = c2.id " +
+		               "WHERE customer_id = ? " +
+		               "ORDER BY dr.request_time DESC;";
+
 			
 			stmt = conn.prepareStatement(query);
 			stmt.setInt(1, userId);
@@ -131,10 +132,12 @@ public class DeliveryRequestDao {
 	            request.setId(id);
 	            request.setCustomerId(customerId);
 	            request.setCanceled(isCanceled);
-	            request.setPickupTime(new Date(pickupTime.getTime()));
-	            request.setPickupTimeEst(new Date(pickupTimeEst.getTime()));
+	            
+	            request.setPickupTime(pickupTime == null ? null : new Date(pickupTime.getTime()));
+	            request.setPickupTimeEst(pickupTimeEst == null ? null : new Date(pickupTimeEst.getTime()));
 
 	            requests.add(request);
+	            System.out.println(request.toString());
 			}
 			
 		} catch (Exception e) {

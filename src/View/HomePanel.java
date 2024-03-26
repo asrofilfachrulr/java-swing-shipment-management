@@ -18,6 +18,7 @@ public class HomePanel extends JPanelInit {
     JLabel lbUsername;
     TariffCheckPanel tariffCheckPanel;
     AddRequestPanel addRequestPanel;
+    RequestListPanel requestListPanel;
 
     HomePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -25,6 +26,7 @@ public class HomePanel extends JPanelInit {
         
         tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
         addRequestPanel = new AddRequestPanel(mainFrame, this);
+        requestListPanel = new RequestListPanel(mainFrame, this);
         
         JLabel lblNewLabel = new JLabel("Welcome,");
         lblNewLabel.setBounds(28, 32, 57, 14);
@@ -66,10 +68,7 @@ public class HomePanel extends JPanelInit {
         JButton btnRequestsList = new JButton("Requests List");
         sl_panel.putConstraint(SpringLayout.SOUTH, btnRequestsList, 146, SpringLayout.SOUTH, btnTariffCheck);
         sl_panel.putConstraint(SpringLayout.EAST, btnRequestsList, 0, SpringLayout.EAST, btnTariffCheck);
-        btnRequestsList.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
-        });
+        btnRequestsList.addActionListener(e -> mainFrame.changeContentPane(requestListPanel));
         sl_panel.putConstraint(SpringLayout.NORTH, btnRequestsList, 83, SpringLayout.SOUTH, btnTariffCheck);
         sl_panel.putConstraint(SpringLayout.WEST, btnRequestsList, 0, SpringLayout.WEST, btnTariffCheck);
         panel.add(btnRequestsList);
