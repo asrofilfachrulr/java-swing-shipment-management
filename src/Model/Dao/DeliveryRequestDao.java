@@ -155,4 +155,58 @@ public class DeliveryRequestDao {
 		
 		return requests;
 	}
+	
+	public void cancel(int id, int user_id) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "UPDATE delivery_requests SET is_canceled = 1 WHERE id = ? AND customer_id = ?";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.setInt(1, id);
+			stmt.setInt(2, user_id);
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+	}
+	
+	public void remove(int id, int user_id) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "DELETE FROM delivery_requests WHERE id = ? AND customer_id = ? AND pickup_time_est IS NULL";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.setInt(1, id);
+			stmt.setInt(2, user_id);
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+	}
 }

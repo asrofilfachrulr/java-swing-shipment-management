@@ -54,8 +54,14 @@ public class CustomerPackageManagement extends PackageManagement{
     	return fetchDeliveryRequests();
     }
 
-    public void cancelDeliveryRequest(){
-
+    public void cancelDeliveryRequest(int id) throws Exception{
+    	DeliveryRequestDao dao = new DeliveryRequestDao();
+    	dao.cancel(id, this.userId);
+    }
+    
+    public void deleteDeliveryRequest(int id) throws Exception {
+    	DeliveryRequestDao dao = new DeliveryRequestDao();
+    	dao.remove(id, this.userId);
     }
 
 	public int getUserId() {

@@ -33,6 +33,10 @@ public class RequestListPanel extends NavContentPanel {
 	private JButton btnDetail;
 	private JButton btnRefresh;
 	private JButton btnNewRequest;
+	private JButton btnCancel;
+	private JButton btnRemove;
+	private List<DeliveryRequest> requests = new ArrayList();
+	private int selectedRow;
 
 	public RequestListPanel(MainFrame mainFrame, JPanel prevPanel) {
 		super(mainFrame, prevPanel);
@@ -45,25 +49,13 @@ public class RequestListPanel extends NavContentPanel {
 		btnDetail.setBounds(454, 36, 106, 39);
 
 		btnRefresh = new JButton("Refresh");
-		btnRefresh.setBounds(454, 86, 106, 39);
-		btnRefresh.addActionListener(e -> {
-			LoadingDialog loadingDialog = new LoadingDialog();
-			loadingDialog.showDialogAndRun("Refreshing", "Retrieving your data...", () -> {
-				try {
-					List<DeliveryRequest> requests = ((Customer) mainFrame.getStore().getAccount())
-							.getPackageManagement().refreshAndFetchDeliveryRequests();
-					loadDataToTable(requests);
-				} catch (Exception err) {
-					JOptionPane.showMessageDialog(null, err.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-			});
-		});
+		btnRefresh.setBounds(454, 189, 106, 39);
+		btnRefresh.addActionListener(e -> refreshAction());
 
 		btnNewRequest = new JButton("Create");
 		btnNewRequest.addActionListener(e -> mainFrame.changeContentPane(new AddRequestPanel(mainFrame, this)));
-		
-		btnNewRequest.setBounds(454, 134, 106, 39);
+
+		btnNewRequest.setBounds(454, 432, 106, 39);
 		contentPane.setLayout(null);
 		contentPane.add(btnNewRequest);
 		contentPane.add(btnRefresh);
@@ -79,20 +71,93 @@ public class RequestListPanel extends NavContentPanel {
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setFillsViewportHeight(true);
-		
-		ListSelectionListener selectionListener = new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = table.getSelectedRow();
-                    System.out.println("Selected row: " + selectedRow);
-                    btnDetail.setEnabled(true);
-                }
-            }
-        };
 
-        table.getSelectionModel().addListSelectionListener(selectionListener);
+		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(e -> {
+			int choice = JOptionPane.showConfirmDialog(null,
+					"Are you sure to cancel this request?\nThis process is irreversible", "Cancel Confirmation",
+					JOptionPane.YES_NO_OPTION);
+
+			if (choice == JOptionPane.NO_OPTION)
+				return;
+
+			int id = requests.get(selectedRow).getId();
+
+			LoadingDialog loadingDialog = new LoadingDialog();
+			loadingDialog.showDialogAndRun("Processing", "Applying your change...", () -> {
+				try {
+					((Customer) mainFrame.getStore().getAccount()).getPackageManagement().cancelDeliveryRequest(id);
+				} catch (Exception err) {
+					JOptionPane.showMessageDialog(null, err.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			});
+
+			refreshAction();
+		});
+
+		btnCancel.setEnabled(false);
+		btnCancel.setBounds(454, 89, 106, 39);
+		contentPane.add(btnCancel);
+
+		btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(e -> {
+			int choice = JOptionPane.showConfirmDialog(null,
+					"Are you sure to remove this request?\nThis process is irreversible", "Cancel Confirmation",
+					JOptionPane.YES_NO_OPTION);
+
+			if (choice == JOptionPane.NO_OPTION)
+				return;
+
+			int id = requests.get(selectedRow).getId();
+
+			LoadingDialog loadingDialog = new LoadingDialog();
+			loadingDialog.showDialogAndRun("Processing", "Deleting your request...", () -> {
+				try {
+					((Customer) mainFrame.getStore().getAccount()).getPackageManagement().deleteDeliveryRequest(id);
+				} catch (Exception err) {
+					JOptionPane.showMessageDialog(null, err.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			});
+
+			refreshAction();
+		});
+
+		btnRemove.setEnabled(false);
+		btnRemove.setBounds(454, 139, 106, 39);
+		contentPane.add(btnRemove);
+
+		RequestListPanel thisPanel = this;
+
+		ListSelectionListener selectionListener = new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting()) {
+					thisPanel.setSelectedRow(table.getSelectedRow());
+
+					System.out.println("Selected row: " + selectedRow);
+
+					if (selectedRow < 0 || selectedRow >= requests.size())
+						return;
+
+					btnDetail.setEnabled(true);
+					btnCancel.setEnabled(false);
+					btnRemove.setEnabled(false);
+
+					DeliveryRequest request = requests.get(selectedRow);
+
+					if (request.isCanceled()) {
+						btnRemove.setEnabled(true);
+					} else if (request.getPickupTimeEst() == null)
+						btnCancel.setEnabled(true);
+				}
+
+			}
+		};
+
+		table.getSelectionModel().addListSelectionListener(selectionListener);
 	}
 
 	private void initTable() {
@@ -135,16 +200,29 @@ public class RequestListPanel extends NavContentPanel {
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
-	@Override
-	public void init() {
-		btnDetail.setEnabled(false);
-		
+	private void fetchRequests() {
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Loading", "Retrieving your data...", () -> {
 			try {
-				List<DeliveryRequest> requests = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
+				List<DeliveryRequest> reqs = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
 						.fetchDeliveryRequests();
-				loadDataToTable(requests);
+				this.setRequests(reqs);
+				loadDataToTable();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		});
+	}
+	
+	private void forceFetchRequests() {
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Loading", "Retrieving your data...", () -> {
+			try {
+				List<DeliveryRequest> reqs = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
+						.refreshAndFetchDeliveryRequests();
+				this.setRequests(reqs);
+				loadDataToTable();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -152,7 +230,12 @@ public class RequestListPanel extends NavContentPanel {
 		});
 	}
 
-	private void loadDataToTable(List<DeliveryRequest> requests) {
+	@Override
+	public void init() {
+		fetchRequests();
+	}
+
+	private void loadDataToTable() {
 		initTable();
 
 		for (DeliveryRequest req : requests) {
@@ -161,7 +244,21 @@ public class RequestListPanel extends NavContentPanel {
 
 			tableModel.addRow(row);
 		}
-		
+
 		btnDetail.setEnabled(false);
+		btnCancel.setEnabled(false);
+		btnRemove.setEnabled(false);
+	}
+
+	private void setRequests(List<DeliveryRequest> requests) {
+		this.requests = requests;
+	}
+
+	private void setSelectedRow(int selectedRow) {
+		this.selectedRow = selectedRow;
+	}
+
+	private void refreshAction() {
+		forceFetchRequests();
 	}
 }
