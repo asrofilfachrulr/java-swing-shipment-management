@@ -21,16 +21,16 @@ public class MainFrame extends JFrame{
         homePanel = new HomePanel(this);
 
         ImageIcon icon = new ImageIcon("logo.png");
+        setIconImage(icon.getImage());
 
         setSize(600, 600);
         setTitle("Shipment Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLocationRelativeTo(null);
+        setResizable(false);
         setLayout(null);
         setContentPane(signinPane);
-        setIconImage(icon.getImage());
-        setResizable(false);
         setMinimumSize(new Dimension(600, 600));
     }
 

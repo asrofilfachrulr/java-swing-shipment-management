@@ -103,7 +103,7 @@ public class RequestListPanel extends NavContentPanel {
 		btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(e -> {
 			int choice = JOptionPane.showConfirmDialog(null,
-					"Are you sure to remove this request?\nThis process is irreversible", "Cancel Confirmation",
+					"Are you sure to remove this request?\nThis process is irreversible", "Remove Confirmation",
 					JOptionPane.YES_NO_OPTION);
 
 			if (choice == JOptionPane.NO_OPTION)
