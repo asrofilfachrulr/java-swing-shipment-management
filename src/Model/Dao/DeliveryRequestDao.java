@@ -73,7 +73,7 @@ public class DeliveryRequestDao {
 		try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "SELECT dr.*, c.name AS origin_name, c.metric AS origin_metric, c2.name AS dest_name, c2.metric AS dest_metric " +
+			String query = "SELECT dr.*, c.name AS origin_name, c.metric AS origin_metric, c.name_abbr AS origin_name_abbr, c2.name AS dest_name, c2.metric AS dest_metric, c2.name_abbr AS dest_name_abbr " +
 		               "FROM delivery_requests dr " +
 		               "JOIN cities c ON dr.city_origin_id = c.id " +
 		               "JOIN cities c2 ON dr.city_dest_id = c2.id " +
@@ -106,12 +106,14 @@ public class DeliveryRequestDao {
 	            int originId = rs.getInt("city_origin_id");
 	            String originName = rs.getString("origin_name");
 	            int originMetric = rs.getInt("origin_metric");
+	            String originNameAbbr = rs.getString("origin_name_abbr");
 	            int destId = rs.getInt("city_dest_id");
 	            String destName = rs.getString("dest_name");
 	            int destMetric = rs.getInt("dest_metric");
+	            String destNameAbbr = rs.getString("dest_name_abbr");
 	            
-	            City originCity = new City(originName, originId, originMetric);
-	            City destCity = new City(destName, destId, destMetric);
+	            City originCity = new City(originName, originId, originMetric, originNameAbbr);
+	            City destCity = new City(destName, destId, destMetric, destNameAbbr);
 	            
 
 	            DeliveryRequest request = new DeliveryRequest(
@@ -165,7 +167,7 @@ public class DeliveryRequestDao {
 		try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "SELECT dr.*, c.name AS origin_name, c.metric AS origin_metric, c2.name AS dest_name, c2.metric AS dest_metric " +
+			String query = "SELECT dr.*, c.name AS origin_name, c.metric AS origin_metric, c.name_abbr AS origin_name_abbr, c2.name AS dest_name, c2.metric AS dest_metric, c2.name_abbr AS dest_name_abbr " +
 		               "FROM delivery_requests dr " +
 		               "JOIN cities c ON dr.city_origin_id = c.id " +
 		               "JOIN cities c2 ON dr.city_dest_id = c2.id " +
@@ -199,12 +201,14 @@ public class DeliveryRequestDao {
 	            int originId = rs.getInt("city_origin_id");
 	            String originName = rs.getString("origin_name");
 	            int originMetric = rs.getInt("origin_metric");
+	            String originNameAbbr = rs.getString("origin_name_abbr");
 	            int destId = rs.getInt("city_dest_id");
 	            String destName = rs.getString("dest_name");
 	            int destMetric = rs.getInt("dest_metric");
+	            String destNameAbbr = rs.getString("dest_name_abbr");
 	            
-	            City originCity = new City(originName, originId, originMetric);
-	            City destCity = new City(destName, destId, destMetric);
+	            City originCity = new City(originName, originId, originMetric, originNameAbbr);
+	            City destCity = new City(destName, destId, destMetric, destNameAbbr);
 	            
 
 	            DeliveryRequest request = new DeliveryRequest(

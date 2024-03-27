@@ -19,7 +19,7 @@ public class CityDao {
         try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "SELECT id, name, metric FROM cities";
+			String query = "SELECT id, name, metric, name_abbr FROM cities";
 			stmt = conn.prepareStatement(query);
 			
 			rs = stmt.executeQuery();
@@ -28,7 +28,8 @@ public class CityDao {
 				City city = new City(
 						rs.getString("name"), 
 						rs.getInt("id"), 
-						rs.getInt("metric")
+						rs.getInt("metric"),
+						rs.getString("name_abbr")
 					);
 				
 				System.out.println(city.toString());

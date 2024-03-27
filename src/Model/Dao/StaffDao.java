@@ -63,7 +63,7 @@ public class StaffDao {
         try {
             conn = DBHelper.getDBConnection();
 
-            String query = "SELECT staff.id, staff.email, staff.phone, staff.fullname, staff.username, cities.name AS office_city, office_types.name AS office_type FROM staff JOIN cities ON staff.office_city_id = cities.id JOIN office_types ON staff.office_type_id = office_types.id WHERE username = ?";
+            String query = "SELECT staff.id, staff.email, staff.phone, staff.fullname, staff.username, cities.name_abbr AS office_city, office_types.name_abbr AS office_type FROM staff JOIN cities ON staff.office_city_id = cities.id JOIN office_types ON staff.office_type_id = office_types.id WHERE username = ?";
 
             stmt = conn.prepareStatement(query);
             stmt.setString(1, username);
