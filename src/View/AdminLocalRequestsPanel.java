@@ -138,12 +138,14 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnPickupEstimate.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnPickupEstimate.setEnabled(false);
 		btnPickupEstimate.setBounds(454, 238, 106, 39);
+		btnPickupEstimate.addActionListener(e -> pickupEstAction());
 		contentPane.add(btnPickupEstimate);
 		
 		btnPickup = new JButton("Pickup");
 		btnPickup.setEnabled(false);
 		btnPickup.setBounds(454, 288, 106, 39);
 		btnPickup.setFont(defaultFont);
+		btnPickup.addActionListener(e -> pickupAction());
 		contentPane.add(btnPickup);
 		
 		JLabel lblNewLabel_1 = new JLabel("Time Information");
@@ -331,7 +333,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Loading", "Retrieving package's detail...", () -> {
 			try {
-				PackageDelivery delivery =((Customer) mainFrame.getStore().getAccount())
+				PackageDelivery delivery =((Staff) mainFrame.getStore().getAccount())
 					.getPackageManagement().fetchPackageDeliveryByDeliveryRequest(request);
 				
 				DeliveryRequestDetailFrame detailFrame = new DeliveryRequestDetailFrame(request, delivery);
@@ -342,5 +344,13 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 				return;
 			}
 		});
+	}
+	
+	private void pickupAction() {
+		mainFrame.changeContentPane(new UpdatePickupTimePanel(mainFrame, this, requests.get(selectedRow)));
+	}
+	
+	private void pickupEstAction() {
+		mainFrame.changeContentPane(new UpdatePickupTimeEstPanel(mainFrame, this, requests.get(selectedRow)));
 	}
 }

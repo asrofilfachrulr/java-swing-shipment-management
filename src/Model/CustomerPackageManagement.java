@@ -65,24 +65,6 @@ public class CustomerPackageManagement extends PackageManagement{
     	DeliveryRequestDao dao = new DeliveryRequestDao();
     	dao.remove(id, this.userId);
     }
-    
-    public PackageDelivery fetchPackageDeliveryByDeliveryRequest(DeliveryRequest request) throws Exception {
-		if(request.getPickupTime() == null)
-			return null;
-		
-		PackageDeliveryDao packageDeliveryDao = new PackageDeliveryDao();
-		PackageHistoryDao packageHistoryDao = new PackageHistoryDao();
-		
-		PackageDelivery delivery = packageDeliveryDao.getByDeliveryReq(request);
-		
-		if(delivery == null)
-			return null;
-		
-		List<PackageHistory> histories = packageHistoryDao.getByPackageDelivery(delivery);
-		delivery.setPackageHistories(histories);
-		
-		return delivery;
-	}
 
 	public int getUserId() {
 		return userId;
