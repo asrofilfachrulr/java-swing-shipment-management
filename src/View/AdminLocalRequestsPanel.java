@@ -159,6 +159,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		contentPane.add(lblNewLabel_1_1);
 		
 		btnDeliver = new JButton("Deliver");
+		btnDeliver.addActionListener(e -> deliverAction());
 		btnDeliver.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnDeliver.setEnabled(false);
 		btnDeliver.setBounds(454, 370, 106, 39);
@@ -352,5 +353,21 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 	
 	private void pickupEstAction() {
 		mainFrame.changeContentPane(new UpdatePickupTimeEstPanel(mainFrame, this, requests.get(selectedRow)));
+	}
+	
+	private void deliverAction() {
+		DeliveryRequest request = requests.get(selectedRow);
+		Staff staff = (Staff) mainFrame.getStore().getAccount();
+		
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Loading", "Adding package to delivery...", () -> {
+			try {
+				staff.getPackageManagement()
+					.createPackageDelivery(request, staff);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		});
 	}
 }

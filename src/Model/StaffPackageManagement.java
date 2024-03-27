@@ -38,7 +38,7 @@ public class StaffPackageManagement extends PackageManagement{
     	PackageDelivery delivery = new PackageDelivery(deliveryRequest, -1, "IN PROGRESS", staff.getId(), null);
     	
     	PackageDeliveryDao dao = new PackageDeliveryDao();
-    	int id = dao.create(null, deliveryRequest.getId());
+    	int id = dao.create(delivery, deliveryRequest.getId());
     	
     	PackageHistory history = new PackageHistory(
     				-1,
