@@ -6,13 +6,13 @@ public class PackageHistory {
     private Date time;
     private String status;
     private String location;
-    private String metadataUrl;
+    private String description;
 
-    public PackageHistory(Date time, String status, String location, String metadataUrl) {
+    public PackageHistory(Date time, String status, String location, String description) {
         this.time = time;
         this.status = status;
         this.location = location;
-        this.metadataUrl = metadataUrl;
+        this.description = description;
     }
 
     public Date getTime() {
@@ -40,10 +40,10 @@ public class PackageHistory {
     }
 
     public String getMetadataUrl() {
-        return metadataUrl;
+        return description;
     }
 
     public void setMetadataUrl(String metadataUrl) {
-        this.metadataUrl = metadataUrl;
+        this.description = metadataUrl;
     }
 }

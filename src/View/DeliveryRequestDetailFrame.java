@@ -9,10 +9,29 @@ import java.awt.Color;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import Model.DeliveryRequest;
+import Model.PackageDelivery;
+import Model.PackageHistory;
+
 import javax.swing.JTextField;
+import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 public class DeliveryRequestDetailFrame extends JFrame {
-	public DeliveryRequestDetailFrame() {
+	private DeliveryRequest deliveryRequest;
+	private PackageDelivery packageDelivery;
+	private JTable table;
+	
+	public DeliveryRequestDetailFrame(DeliveryRequest deliveryRequest, PackageDelivery packageDelivery) {
+		this.deliveryRequest = deliveryRequest;
+		this.packageDelivery = packageDelivery;
+		
 		setSize(600, 800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Delivery Request Detail");
@@ -25,13 +44,16 @@ public class DeliveryRequestDetailFrame extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Delivery Request Detail");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel.setBounds(22, 32, 125, 15);
+		lblNewLabel.setBounds(22, 25, 125, 15);
 		getContentPane().add(lblNewLabel);
 		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(22, 72, 532, 638);
+		getContentPane().add(tabbedPane);
+		
 		JPanel panel = new JPanel();
+		tabbedPane.addTab("Request Information", null, panel, null);
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(22, 72, 532, 624);
-		getContentPane().add(panel);
 		
 		JLabel lblNewLabel_2 = new JLabel("Personal Information");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -230,6 +252,83 @@ public class DeliveryRequestDetailFrame extends JFrame {
 					.addContainerGap(14, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(255, 255, 255));
+		tabbedPane.addTab("Package History", null, panel_1, null);
+		
+		JLabel lblNewLabel_4 = new JLabel("Delivery ID");
+		
+		JLabel lblNewLabel_5 = new JLabel("Status");
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(21)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 480, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(lblNewLabel_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblNewLabel_4, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)))
+					.addContainerGap(26, Short.MAX_VALUE))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(19)
+					.addComponent(lblNewLabel_4)
+					.addGap(18)
+					.addComponent(lblNewLabel_5)
+					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 495, GroupLayout.PREFERRED_SIZE)
+					.addGap(23))
+		);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"Time", "Location", "Status", "Description", "Staff ID"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, String.class, String.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(120);
+		table.getColumnModel().getColumn(0).setMinWidth(120);
+		table.getColumnModel().getColumn(1).setPreferredWidth(110);
+		table.getColumnModel().getColumn(1).setMinWidth(110);
+		table.getColumnModel().getColumn(1).setMaxWidth(120);
+		table.getColumnModel().getColumn(2).setPreferredWidth(120);
+		table.getColumnModel().getColumn(2).setMinWidth(120);
+		table.getColumnModel().getColumn(2).setMaxWidth(130);
+		table.getColumnModel().getColumn(3).setPreferredWidth(130);
+		table.getColumnModel().getColumn(3).setMinWidth(120);
+		table.getColumnModel().getColumn(3).setMaxWidth(150);
+		table.getColumnModel().getColumn(4).setMinWidth(75);
+		table.getColumnModel().getColumn(4).setMaxWidth(100);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setColumnSelectionAllowed(true);
+		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		table.setFillsViewportHeight(true);
+		scrollPane.setViewportView(table);
+		panel_1.setLayout(gl_panel_1);
 		
 		JLabel lblNewLabel_1 = new JLabel("ID");
 		lblNewLabel_1.setBounds(365, 47, 11, 14);
