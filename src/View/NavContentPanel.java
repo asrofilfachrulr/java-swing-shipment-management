@@ -14,8 +14,10 @@ public class NavContentPanel extends JPanelInit {
     protected JPanel contentPane = new JPanel();
     protected JPanel prevPanel;
     protected MainFrame mainFrame;
+    protected boolean isAdmin = false;
+   
 
-    public NavContentPanel(MainFrame mainFrame, JPanel prevPanel) {
+	public NavContentPanel(MainFrame mainFrame, JPanel prevPanel) {
         this.mainFrame = mainFrame;
         this.prevPanel = prevPanel;
 
@@ -33,7 +35,8 @@ public class NavContentPanel extends JPanelInit {
         homeBtn = new JButton();
         homeBtn.setIcon(homeIC);
         homeBtn.setFocusable(false);
-        homeBtn.addActionListener(e -> mainFrame.changeContentPaneToHome());
+        
+        homeBtn.addActionListener(e -> homeAction());
 
         navPane.setBounds(0, 0, 600, 50);
         contentPane.setBounds(0, 50, 600, 550);
@@ -61,8 +64,18 @@ public class NavContentPanel extends JPanelInit {
         navPane.setLayout(gl_navPane);
         add(contentPane);
     }
+	
+    public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 
-    protected void setBackBtnAction(){
+	private void homeAction() {
+		if(isAdmin)
+			mainFrame.changeContentPaneToAdminHome();
+		else mainFrame.changeContentPaneToHome();
+	}
+
+	protected void setBackBtnAction(){
         if(prevPanel != null) {
             backBtn.addActionListener(e -> mainFrame.changeContentPaneWithoutInit(prevPanel));
         }

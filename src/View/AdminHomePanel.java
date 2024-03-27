@@ -25,8 +25,13 @@ public class AdminHomePanel extends JPanelInit {
         setLayout(null);
         
         tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
+        tariffCheckPanel.setAdmin(true);
+        
         addRequestPanel = new AddRequestPanel(mainFrame, this);
+        addRequestPanel.setAdmin(true);
+        
         requestListPanel = new RequestListPanel(mainFrame, this);
+        requestListPanel.setAdmin(true);
         
         JLabel lblNewLabel = new JLabel("Welcome,");
         lblNewLabel.setBounds(28, 32, 57, 14);
@@ -49,7 +54,10 @@ public class AdminHomePanel extends JPanelInit {
         SpringLayout sl_panel = new SpringLayout();
         panel.setLayout(sl_panel);
         
+        Font defFont = new Font("Tahoma", Font.PLAIN, 11);
+        
         JButton btnTariffCheck = new JButton("Tariff Check");
+        btnTariffCheck.setFont(defFont);
         sl_panel.putConstraint(SpringLayout.NORTH, btnTariffCheck, 63, SpringLayout.NORTH, panel);
         sl_panel.putConstraint(SpringLayout.WEST, btnTariffCheck, 71, SpringLayout.WEST, panel);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnTariffCheck, 126, SpringLayout.NORTH, panel);
@@ -58,6 +66,7 @@ public class AdminHomePanel extends JPanelInit {
         panel.add(btnTariffCheck);
         
         JButton btnLocalRequest = new JButton("Local Requests");
+        btnLocalRequest.setFont(defFont);
         sl_panel.putConstraint(SpringLayout.NORTH, btnLocalRequest, 63, SpringLayout.NORTH, panel);
         sl_panel.putConstraint(SpringLayout.WEST, btnLocalRequest, -210, SpringLayout.EAST, panel);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnLocalRequest, -356, SpringLayout.SOUTH, panel);
@@ -66,6 +75,7 @@ public class AdminHomePanel extends JPanelInit {
         panel.add(btnLocalRequest);
         
         JButton btnRequestsList = new JButton("Package Delivery");
+        btnRequestsList.setFont(defFont);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnRequestsList, 146, SpringLayout.SOUTH, btnTariffCheck);
         sl_panel.putConstraint(SpringLayout.EAST, btnRequestsList, 0, SpringLayout.EAST, btnTariffCheck);
         btnRequestsList.addActionListener(e -> mainFrame.changeContentPane(requestListPanel));
@@ -74,8 +84,9 @@ public class AdminHomePanel extends JPanelInit {
         panel.add(btnRequestsList);
         
         JButton btnLogout = new JButton("Logout");
-        sl_panel.putConstraint(SpringLayout.NORTH, btnLogout, -73, SpringLayout.SOUTH, panel);
-        sl_panel.putConstraint(SpringLayout.WEST, btnLogout, -156, SpringLayout.EAST, panel);
+        sl_panel.putConstraint(SpringLayout.NORTH, btnLogout, -63, SpringLayout.SOUTH, panel);
+        sl_panel.putConstraint(SpringLayout.WEST, btnLogout, -124, SpringLayout.EAST, panel);
+        btnLogout.setFont(defFont);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnLogout, -21, SpringLayout.SOUTH, panel);
         sl_panel.putConstraint(SpringLayout.EAST, btnLogout, -25, SpringLayout.EAST, panel);
         btnLogout.addMouseListener(new MouseAdapter() {

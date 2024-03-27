@@ -120,11 +120,12 @@ public class LoginPanel extends NavContentPanel {
 
                 if(accountType == Guest.ACCOUNT_STAFF){
                     System.out.println(((Staff) account).toString());
+                    mainFrame.changeContentPaneToAdminHome();
                 } else {
                     System.out.println(((Customer) account).toString());
+                    mainFrame.changeContentPaneToHome();
                 }
 
-                mainFrame.changeContentPaneToHome();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
             }

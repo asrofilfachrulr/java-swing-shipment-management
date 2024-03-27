@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame{
     SigninPanel signinPane;
     HomePanel homePanel;
+    AdminHomePanel adminHomePanel;
 
     GlobalStore store;
 
@@ -19,6 +20,7 @@ public class MainFrame extends JFrame{
 
         signinPane = new SigninPanel(this);
         homePanel = new HomePanel(this);
+        adminHomePanel = new AdminHomePanel(this);
 
         ImageIcon icon = new ImageIcon("logo.png");
         setIconImage(icon.getImage());
@@ -61,6 +63,18 @@ public class MainFrame extends JFrame{
             if(homePanel == null)
             	homePanel = new HomePanel(this);
             changeContentPane(homePanel);
+        }
+    }
+    
+    public void changeContentPaneToAdminHome() {
+        if(adminHomePanel != null) {
+            if(store.getAccount() == null) {
+                changeContentPaneToSignIn();
+                return;
+            }
+            if(adminHomePanel == null)
+            	adminHomePanel = new AdminHomePanel(this);
+            changeContentPane(adminHomePanel);
         }
     }
     
