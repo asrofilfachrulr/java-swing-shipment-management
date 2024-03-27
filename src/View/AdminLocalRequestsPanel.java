@@ -41,6 +41,8 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 	private final Font defaultFont = new Font("Tahoma", Font.PLAIN, 11);
 	private JButton btnPickupEstimate;
 	private JButton btnPickup;
+	private JButton btnDeliver;
+	private JLabel lblNewLabel_2;
 
 	public AdminLocalRequestsPanel(MainFrame mainFrame, JPanel prevPanel) {
 		super(mainFrame, prevPanel);
@@ -135,24 +137,35 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnPickupEstimate = new JButton("Pickup Estimate");
 		btnPickupEstimate.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnPickupEstimate.setEnabled(false);
-		btnPickupEstimate.setBounds(454, 263, 106, 39);
+		btnPickupEstimate.setBounds(454, 238, 106, 39);
 		contentPane.add(btnPickupEstimate);
 		
 		btnPickup = new JButton("Pickup");
 		btnPickup.setEnabled(false);
-		btnPickup.setBounds(454, 320, 106, 39);
+		btnPickup.setBounds(454, 288, 106, 39);
 		btnPickup.setFont(defaultFont);
 		contentPane.add(btnPickup);
 		
 		JLabel lblNewLabel_1 = new JLabel("Time Information");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_1.setBounds(454, 216, 106, 14);
+		lblNewLabel_1.setBounds(454, 199, 106, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Controls");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_1_1.setBounds(454, 228, 106, 14);
+		lblNewLabel_1_1.setBounds(454, 213, 106, 14);
 		contentPane.add(lblNewLabel_1_1);
+		
+		btnDeliver = new JButton("Deliver");
+		btnDeliver.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnDeliver.setEnabled(false);
+		btnDeliver.setBounds(454, 370, 106, 39);
+		contentPane.add(btnDeliver);
+		
+		lblNewLabel_2 = new JLabel("Add to Delivery");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_2.setBounds(454, 351, 106, 14);
+		contentPane.add(lblNewLabel_2);
 
 		AdminLocalRequestsPanel thisPanel = this;
 
@@ -173,6 +186,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 					btnRemove.setEnabled(false);
 					btnPickup.setEnabled(false);
 					btnPickupEstimate.setEnabled(false);
+					btnDeliver.setEnabled(false);
 
 					DeliveryRequest request = requests.get(selectedRow);
 
@@ -181,6 +195,9 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 					} else {
 						if (request.getPickupTimeEst() == null)
 							btnCancel.setEnabled(true);
+						
+						if(request.getPickupTime() != null)
+							btnDeliver.setEnabled(true);
 						
 						btnPickup.setEnabled(true);
 						btnPickupEstimate.setEnabled(true);
@@ -293,6 +310,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnRemove.setEnabled(false);
 		btnPickup.setEnabled(false);
 		btnPickupEstimate.setEnabled(false);
+		btnDeliver.setEnabled(false);
 	}
 
 	private void setRequests(List<DeliveryRequest> requests) {

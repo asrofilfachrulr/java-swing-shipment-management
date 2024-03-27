@@ -302,4 +302,58 @@ public class DeliveryRequestDao {
 				conn.close();
 		}
 	}
+	
+	public void updatePickupEst(int id, Date time) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "UPDATE FROM delivery_requests SET pickup_time_est = ? WHERE id = ?";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.setTimestamp(1, time != null ? new Timestamp(time.getTime()) : null);
+			stmt.setInt(2, id);
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+	}
+	
+	public void updatePickup(int id, Date time) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "UPDATE FROM delivery_requests SET pickup_time_ = ? WHERE id = ?";
+			stmt = conn.prepareStatement(query);
+			
+			stmt.setTimestamp(1, time != null ? new Timestamp(time.getTime()) : null);
+			stmt.setInt(2, id);
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+	}
 }

@@ -23,6 +23,43 @@ public class PackageDeliveryDao {
 		return null;
 	}
 	
+	public int create(PackageDelivery delivery, int requestId) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		int id = -1;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "INSERT INTO package_deliveries (status, delivery_req_id, staff_id) VALUES (?, ?, ?)";
+
+			stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+			
+			stmt.setString(1, delivery.getStatus()); // Assuming you have a status value
+		    stmt.setInt(2, requestId); // Assuming you have a delivery request ID
+		    stmt.setInt(3, delivery.getStaffId()); // Assuming you have a staff ID
+			
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			
+			while(rs.next()) {
+				id = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+		
+		return id;
+	}
+	
 	public PackageDelivery getByDeliveryReq(DeliveryRequest req) throws Exception {
 		Connection conn = null;
         PreparedStatement stmt = null;

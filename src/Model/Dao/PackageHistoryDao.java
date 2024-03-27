@@ -60,4 +60,36 @@ public class PackageHistoryDao {
         
         return histories;
 	}
+	
+	public void create(PackageHistory history, int deliveryId) throws Exception {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			conn = DBHelper.getDBConnection();
+			
+			String query = "INSERT INTO package_histories (time, status, location, description, package_delivery_id, staff_id) VALUES (?, ?, ?, ?, ?, ?)";
+
+			stmt = conn.prepareStatement(query);
+			
+			stmt.setTimestamp(1, new Timestamp(history.getTime().getTime()));
+		    stmt.setString(2, history.getStatus());
+		    stmt.setString(3, history.getLocation());
+		    stmt.setString(4, history.getDescription());
+		    stmt.setInt(5, deliveryId);
+		    stmt.setInt(6, history.getStaffId()); 
+			
+			stmt.executeUpdate();
+			
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+
+			if (stmt != null)
+				stmt.close();
+
+			if (conn != null)
+				conn.close();
+		}
+	}
 }
