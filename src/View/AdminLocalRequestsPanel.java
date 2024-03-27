@@ -27,6 +27,7 @@ import javax.swing.ListSelectionModel;
 import Model.Customer;
 import Model.DeliveryRequest;
 import Model.PackageDelivery;
+import Model.Staff;
 
 public class AdminLocalRequestsPanel extends NavContentPanel {
 	private JTable table;
@@ -37,6 +38,9 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 	private JButton btnRemove;
 	private List<DeliveryRequest> requests = new ArrayList();
 	private int selectedRow;
+	private final Font defaultFont = new Font("Tahoma", Font.PLAIN, 11);
+	private JButton btnPickupEstimate;
+	private JButton btnPickup;
 
 	public AdminLocalRequestsPanel(MainFrame mainFrame, JPanel prevPanel) {
 		super(mainFrame, prevPanel);
@@ -48,10 +52,12 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnDetail = new JButton("Detail >>");
 		btnDetail.setBounds(454, 36, 106, 39);
 		btnDetail.addActionListener(e -> detailAction());
+		btnDetail.setFont(defaultFont);
 
 		btnRefresh = new JButton("Refresh");
 		btnRefresh.setBounds(454, 432, 106, 39);
 		btnRefresh.addActionListener(e -> refreshAction());
+		btnRefresh.setFont(defaultFont);
 
 		contentPane.setLayout(null);
 		contentPane.add(btnRefresh);
@@ -69,6 +75,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		table.setFillsViewportHeight(true);
 
 		btnCancel = new JButton("Cancel");
+		btnCancel.setFont(defaultFont);
 		btnCancel.addActionListener(e -> {
 			int choice = JOptionPane.showConfirmDialog(null,
 					"Are you sure to cancel this request?\nThis process is irreversible", "Cancel Confirmation",
@@ -97,6 +104,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		contentPane.add(btnCancel);
 
 		btnRemove = new JButton("Remove");
+		btnRemove.setFont(defaultFont);
 		btnRemove.addActionListener(e -> {
 			int choice = JOptionPane.showConfirmDialog(null,
 					"Are you sure to remove this request?\nThis process is irreversible", "Remove Confirmation",
@@ -124,14 +132,16 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnRemove.setBounds(454, 139, 106, 39);
 		contentPane.add(btnRemove);
 		
-		JButton btnPickupEstimate = new JButton("Pickup Estimate");
+		btnPickupEstimate = new JButton("Pickup Estimate");
+		btnPickupEstimate.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnPickupEstimate.setEnabled(false);
 		btnPickupEstimate.setBounds(454, 263, 106, 39);
 		contentPane.add(btnPickupEstimate);
 		
-		JButton btnPickup = new JButton("Pickup");
+		btnPickup = new JButton("Pickup");
 		btnPickup.setEnabled(false);
 		btnPickup.setBounds(454, 320, 106, 39);
+		btnPickup.setFont(defaultFont);
 		contentPane.add(btnPickup);
 		
 		JLabel lblNewLabel_1 = new JLabel("Time Information");
@@ -161,13 +171,20 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 					btnDetail.setEnabled(true);
 					btnCancel.setEnabled(false);
 					btnRemove.setEnabled(false);
+					btnPickup.setEnabled(false);
+					btnPickupEstimate.setEnabled(false);
 
 					DeliveryRequest request = requests.get(selectedRow);
 
 					if (request.isCanceled()) {
 						btnRemove.setEnabled(true);
-					} else if (request.getPickupTimeEst() == null)
-						btnCancel.setEnabled(true);
+					} else {
+						if (request.getPickupTimeEst() == null)
+							btnCancel.setEnabled(true);
+						
+						btnPickup.setEnabled(true);
+						btnPickupEstimate.setEnabled(true);
+					}
 				}
 
 			}
@@ -178,14 +195,14 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 
 	private void initTable() {
 		tableModel = new DefaultTableModel(new Object[][] {},
-				new String[] { "Id", "Created", "Package Description", "Destination", "Pickup Estimate" }) {
-			Class[] columnTypes = new Class[] { Integer.class, String.class, String.class, String.class, String.class };
+				new String[] { "Id", "Created", "Weight (kg)", "Package Description", "Destination", "Pickup Estimate", "Pickup Time", "Status" }) {
+			Class[] columnTypes = new Class[] { Integer.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class };
 
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 
-			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+			boolean[] columnEditables = new boolean[] { false, false, false, false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -202,16 +219,28 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		table.getColumnModel().getColumn(1).setPreferredWidth(120);
 		table.getColumnModel().getColumn(1).setMinWidth(120);
 		table.getColumnModel().getColumn(1).setMaxWidth(120);
-		table.getColumnModel().getColumn(2).setPreferredWidth(180);
-		table.getColumnModel().getColumn(2).setMinWidth(175);
-		table.getColumnModel().getColumn(2).setMaxWidth(250);
-		table.getColumnModel().getColumn(3).setResizable(false);
-		table.getColumnModel().getColumn(3).setMinWidth(75);
-		table.getColumnModel().getColumn(3).setMaxWidth(80);
+		table.getColumnModel().getColumn(2).setResizable(false);
+		table.getColumnModel().getColumn(2).setPreferredWidth(60);
+		table.getColumnModel().getColumn(2).setMinWidth(60);
+		table.getColumnModel().getColumn(2).setMaxWidth(60);
+		table.getColumnModel().getColumn(3).setPreferredWidth(180);
+		table.getColumnModel().getColumn(3).setMinWidth(175);
+		table.getColumnModel().getColumn(3).setMaxWidth(250);
 		table.getColumnModel().getColumn(4).setResizable(false);
-		table.getColumnModel().getColumn(4).setPreferredWidth(120);
-		table.getColumnModel().getColumn(4).setMinWidth(120);
-		table.getColumnModel().getColumn(4).setMaxWidth(120);
+		table.getColumnModel().getColumn(4).setMinWidth(75);
+		table.getColumnModel().getColumn(4).setMaxWidth(80);
+		table.getColumnModel().getColumn(5).setResizable(false);
+		table.getColumnModel().getColumn(5).setPreferredWidth(120);
+		table.getColumnModel().getColumn(5).setMinWidth(120);
+		table.getColumnModel().getColumn(5).setMaxWidth(120);
+		table.getColumnModel().getColumn(6).setResizable(false);
+		table.getColumnModel().getColumn(6).setPreferredWidth(120);
+		table.getColumnModel().getColumn(6).setMinWidth(120);
+		table.getColumnModel().getColumn(6).setMaxWidth(120);
+		table.getColumnModel().getColumn(7).setResizable(false);
+		table.getColumnModel().getColumn(7).setPreferredWidth(90);
+		table.getColumnModel().getColumn(7).setMinWidth(90);
+		table.getColumnModel().getColumn(7).setMaxWidth(90);
 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
@@ -220,8 +249,9 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Loading", "Retrieving your data...", () -> {
 			try {
-				List<DeliveryRequest> reqs = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
-						.fetchDeliveryRequests();
+				Staff acc = ((Staff) mainFrame.getStore().getAccount());
+				List<DeliveryRequest> reqs = acc.getPackageManagement()
+						.fetchAllDeliveryRequests(acc.getId());
 				this.setRequests(reqs);
 				loadDataToTable();
 			} catch (Exception e) {
@@ -232,18 +262,7 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 	}
 	
 	private void forceFetchRequests() {
-		LoadingDialog loadingDialog = new LoadingDialog();
-		loadingDialog.showDialogAndRun("Loading", "Retrieving your data...", () -> {
-			try {
-				List<DeliveryRequest> reqs = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
-						.refreshAndFetchDeliveryRequests();
-				this.setRequests(reqs);
-				loadDataToTable();
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		});
+		fetchRequests();
 	}
 
 	@Override
@@ -255,8 +274,16 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		initTable();
 
 		for (DeliveryRequest req : requests) {
-			Object[] row = { req.getId(), DateHelper.dateToFormattedString(req.getTime()), req.getStuffDesc(),
-					req.getDestCity().getName(), DateHelper.dateToFormattedString(req.getPickupTimeEst()) };
+			Object[] row = { 
+					req.getId(), 
+					DateHelper.dateToFormattedString(req.getTime()), 
+					String.format("%.2f", req.getWeight()),
+					req.getStuffDesc(),
+					req.getDestCity().getName(), 
+					DateHelper.dateToFormattedString(req.getPickupTimeEst()),
+					DateHelper.dateToFormattedString(req.getPickupTime()),
+					req.isCanceled() ? "Canceled" : "Submitted"
+				};
 
 			tableModel.addRow(row);
 		}
@@ -264,6 +291,8 @@ public class AdminLocalRequestsPanel extends NavContentPanel {
 		btnDetail.setEnabled(false);
 		btnCancel.setEnabled(false);
 		btnRemove.setEnabled(false);
+		btnPickup.setEnabled(false);
+		btnPickupEstimate.setEnabled(false);
 	}
 
 	private void setRequests(List<DeliveryRequest> requests) {

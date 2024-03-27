@@ -163,15 +163,16 @@ public class RequestListPanel extends NavContentPanel {
 	}
 
 	private void initTable() {
-		tableModel = new DefaultTableModel(new Object[][] {},
-				new String[] { "Id", "Created", "Package Description", "Destination", "Pickup Estimate" }) {
-			Class[] columnTypes = new Class[] { Integer.class, String.class, String.class, String.class, String.class };
+		tableModel = new DefaultTableModel(new Object[][] {}, new String[] { "Id", "Created", "Package Description",
+				"Destination", "Pickup Time Estimate", "Pickup Time", "Status" }) {
+			Class[] columnTypes = new Class[] { Integer.class, String.class, String.class, String.class, String.class, String.class,
+					String.class };
 
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 
-			boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+			boolean[] columnEditables = new boolean[] { false, false, false, false, false, false };
 
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -195,9 +196,18 @@ public class RequestListPanel extends NavContentPanel {
 		table.getColumnModel().getColumn(3).setMinWidth(75);
 		table.getColumnModel().getColumn(3).setMaxWidth(80);
 		table.getColumnModel().getColumn(4).setResizable(false);
-		table.getColumnModel().getColumn(4).setPreferredWidth(120);
-		table.getColumnModel().getColumn(4).setMinWidth(120);
-		table.getColumnModel().getColumn(4).setMaxWidth(120);
+		table.getColumnModel().getColumn(4).setPreferredWidth(130);
+		table.getColumnModel().getColumn(4).setMinWidth(130);
+		table.getColumnModel().getColumn(4).setMaxWidth(130);
+		table.getColumnModel().getColumn(5).setResizable(false);
+		table.getColumnModel().getColumn(5).setPreferredWidth(130);
+		table.getColumnModel().getColumn(5).setMinWidth(130);
+		table.getColumnModel().getColumn(5).setMaxWidth(130);
+		table.getColumnModel().getColumn(6).setResizable(false);
+		table.getColumnModel().getColumn(6).setPreferredWidth(90);
+		table.getColumnModel().getColumn(6).setMinWidth(90);
+		table.getColumnModel().getColumn(6).setMaxWidth(90);
+		
 
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
@@ -216,7 +226,7 @@ public class RequestListPanel extends NavContentPanel {
 			}
 		});
 	}
-	
+
 	private void forceFetchRequests() {
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Loading", "Retrieving your data...", () -> {
@@ -242,7 +252,8 @@ public class RequestListPanel extends NavContentPanel {
 
 		for (DeliveryRequest req : requests) {
 			Object[] row = { req.getId(), DateHelper.dateToFormattedString(req.getTime()), req.getStuffDesc(),
-					req.getDestCity().getName(), DateHelper.dateToFormattedString(req.getPickupTimeEst()) };
+					req.getDestCity().getName(), DateHelper.dateToFormattedString(req.getPickupTimeEst()),
+					DateHelper.dateToFormattedString(req.getPickupTime()), req.isCanceled() ? "Canceled" : "Submitted" };
 
 			tableModel.addRow(row);
 		}
@@ -263,16 +274,16 @@ public class RequestListPanel extends NavContentPanel {
 	private void refreshAction() {
 		forceFetchRequests();
 	}
-	
+
 	private void detailAction() {
 		DeliveryRequest request = requests.get(selectedRow);
-		
+
 		LoadingDialog loadingDialog = new LoadingDialog();
 		loadingDialog.showDialogAndRun("Loading", "Retrieving package's detail...", () -> {
 			try {
-				PackageDelivery delivery =((Customer) mainFrame.getStore().getAccount())
-					.getPackageManagement().fetchPackageDeliveryByDeliveryRequest(request);
-				
+				PackageDelivery delivery = ((Customer) mainFrame.getStore().getAccount()).getPackageManagement()
+						.fetchPackageDeliveryByDeliveryRequest(request);
+
 				DeliveryRequestDetailFrame detailFrame = new DeliveryRequestDetailFrame(request, delivery);
 				detailFrame.init();
 				detailFrame.showFrame();

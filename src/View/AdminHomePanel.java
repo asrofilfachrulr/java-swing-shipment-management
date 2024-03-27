@@ -17,8 +17,8 @@ public class AdminHomePanel extends JPanelInit {
     MainFrame mainFrame;
     JLabel lbUsername;
     TariffCheckPanel tariffCheckPanel;
-    AddRequestPanel addRequestPanel;
-    RequestListPanel requestListPanel;
+    AdminLocalRequestsPanel adminLocalRequestsPanel;
+    AdminPackageDeliveryPanel adminPackageDeliveryPanel;
 
     AdminHomePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -27,11 +27,11 @@ public class AdminHomePanel extends JPanelInit {
         tariffCheckPanel = new TariffCheckPanel(mainFrame, this);
         tariffCheckPanel.setAdmin(true);
         
-        addRequestPanel = new AddRequestPanel(mainFrame, this);
-        addRequestPanel.setAdmin(true);
+        adminLocalRequestsPanel = new AdminLocalRequestsPanel(mainFrame, this);
+        adminLocalRequestsPanel.setAdmin(true);
         
-        requestListPanel = new RequestListPanel(mainFrame, this);
-        requestListPanel.setAdmin(true);
+        adminPackageDeliveryPanel = new AdminPackageDeliveryPanel(mainFrame, this);
+        adminPackageDeliveryPanel.setAdmin(true);
         
         JLabel lblNewLabel = new JLabel("Welcome,");
         lblNewLabel.setBounds(28, 32, 57, 14);
@@ -71,24 +71,25 @@ public class AdminHomePanel extends JPanelInit {
         sl_panel.putConstraint(SpringLayout.WEST, btnLocalRequest, -210, SpringLayout.EAST, panel);
         sl_panel.putConstraint(SpringLayout.SOUTH, btnLocalRequest, -356, SpringLayout.SOUTH, panel);
         sl_panel.putConstraint(SpringLayout.EAST, btnLocalRequest, -79, SpringLayout.EAST, panel);
-        btnLocalRequest.addActionListener(e -> mainFrame.changeContentPane(addRequestPanel));
+        btnLocalRequest.addActionListener(e -> mainFrame.changeContentPane(adminLocalRequestsPanel));
         panel.add(btnLocalRequest);
         
-        JButton btnRequestsList = new JButton("Package Delivery");
-        btnRequestsList.setFont(defFont);
-        sl_panel.putConstraint(SpringLayout.SOUTH, btnRequestsList, 146, SpringLayout.SOUTH, btnTariffCheck);
-        sl_panel.putConstraint(SpringLayout.EAST, btnRequestsList, 0, SpringLayout.EAST, btnTariffCheck);
-        btnRequestsList.addActionListener(e -> mainFrame.changeContentPane(requestListPanel));
-        sl_panel.putConstraint(SpringLayout.NORTH, btnRequestsList, 83, SpringLayout.SOUTH, btnTariffCheck);
-        sl_panel.putConstraint(SpringLayout.WEST, btnRequestsList, 0, SpringLayout.WEST, btnTariffCheck);
-        panel.add(btnRequestsList);
+        JButton btnPackageDelivery = new JButton("Package Delivery");
+        btnPackageDelivery.setFont(defFont);
+        sl_panel.putConstraint(SpringLayout.SOUTH, btnPackageDelivery, 146, SpringLayout.SOUTH, btnTariffCheck);
+        sl_panel.putConstraint(SpringLayout.EAST, btnPackageDelivery, 0, SpringLayout.EAST, btnTariffCheck);
+        btnPackageDelivery.addActionListener(e -> mainFrame.changeContentPane(adminPackageDeliveryPanel));
+        
+        sl_panel.putConstraint(SpringLayout.NORTH, btnPackageDelivery, 83, SpringLayout.SOUTH, btnTariffCheck);
+        sl_panel.putConstraint(SpringLayout.WEST, btnPackageDelivery, 0, SpringLayout.WEST, btnTariffCheck);
+        panel.add(btnPackageDelivery);
         
         JButton btnLogout = new JButton("Logout");
-        sl_panel.putConstraint(SpringLayout.NORTH, btnLogout, -63, SpringLayout.SOUTH, panel);
-        sl_panel.putConstraint(SpringLayout.WEST, btnLogout, -124, SpringLayout.EAST, panel);
+        sl_panel.putConstraint(SpringLayout.NORTH, btnLogout, -84, SpringLayout.SOUTH, panel);
+        sl_panel.putConstraint(SpringLayout.WEST, btnLogout, -125, SpringLayout.EAST, panel);
+        sl_panel.putConstraint(SpringLayout.SOUTH, btnLogout, -42, SpringLayout.SOUTH, panel);
+        sl_panel.putConstraint(SpringLayout.EAST, btnLogout, -26, SpringLayout.EAST, panel);
         btnLogout.setFont(defFont);
-        sl_panel.putConstraint(SpringLayout.SOUTH, btnLogout, -21, SpringLayout.SOUTH, panel);
-        sl_panel.putConstraint(SpringLayout.EAST, btnLogout, -25, SpringLayout.EAST, panel);
         btnLogout.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
