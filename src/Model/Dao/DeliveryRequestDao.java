@@ -314,7 +314,7 @@ public class DeliveryRequestDao {
 		try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "UPDATE FROM delivery_requests SET pickup_time_est = ? WHERE id = ?";
+			String query = "UPDATE delivery_requests SET pickup_time_est = ? WHERE id = ?";
 			stmt = conn.prepareStatement(query);
 			
 			stmt.setTimestamp(1, time != null ? new Timestamp(time.getTime()) : null);
@@ -341,7 +341,7 @@ public class DeliveryRequestDao {
 		try {
 			conn = DBHelper.getDBConnection();
 			
-			String query = "UPDATE FROM delivery_requests SET pickup_time_ = ? WHERE id = ?";
+			String query = "UPDATE delivery_requests SET pickup_time = ? WHERE id = ?";
 			stmt = conn.prepareStatement(query);
 			
 			stmt.setTimestamp(1, time != null ? new Timestamp(time.getTime()) : null);

@@ -59,7 +59,7 @@ public class UpdatePickupTimePanel extends NavContentPanel {
 		JLabel lblNewLabel_1_1 = new JLabel("HH:MM (ex: 13:24)");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("DD:MM:YYYY (ex: 02:12:2024)");
+		JLabel lblNewLabel_1_1_1 = new JLabel("DD/MM/YYYY (ex: 02/12/2024)");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(

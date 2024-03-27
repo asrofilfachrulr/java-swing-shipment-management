@@ -35,7 +35,7 @@ public class LoadingDialog extends JDialog {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                Thread.sleep(1500);
+                Thread.sleep(1000);
                 runnable.run();
                 return null;
             }

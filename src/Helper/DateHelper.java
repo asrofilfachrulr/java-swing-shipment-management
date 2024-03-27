@@ -23,12 +23,12 @@ public class DateHelper {
 	public static String parseDateToDDMMYYYY(Date date) {
 		if (date == null)
 			return "-";
-		SimpleDateFormat formatter = new SimpleDateFormat("dd:MM:yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		return formatter.format(date);
 	}
 
 	public static Date parseStringToDate(String dateString) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd:MM:yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy");
             return formatter.parse(dateString);
 	}
         
