@@ -26,6 +26,7 @@ import javax.swing.ListSelectionModel;
 
 import Model.Customer;
 import Model.DeliveryRequest;
+import Model.PackageDelivery;
 
 public class RequestListPanel extends NavContentPanel {
 	private JTable table;
@@ -47,6 +48,7 @@ public class RequestListPanel extends NavContentPanel {
 
 		btnDetail = new JButton("Detail >>");
 		btnDetail.setBounds(454, 36, 106, 39);
+		btnDetail.addActionListener(e -> detailAction());
 
 		btnRefresh = new JButton("Refresh");
 		btnRefresh.setBounds(454, 189, 106, 39);
@@ -260,5 +262,24 @@ public class RequestListPanel extends NavContentPanel {
 
 	private void refreshAction() {
 		forceFetchRequests();
+	}
+	
+	private void detailAction() {
+		DeliveryRequest request = requests.get(selectedRow);
+		
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Loading", "Retrieving package's detail...", () -> {
+			try {
+				PackageDelivery delivery =((Customer) mainFrame.getStore().getAccount())
+					.getPackageManagement().fetchPackageDeliveryByDeliveryRequest(request);
+				
+				DeliveryRequestDetailFrame detailFrame = new DeliveryRequestDetailFrame(request, delivery);
+				detailFrame.init();
+				detailFrame.showFrame();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		});
 	}
 }

@@ -26,6 +26,8 @@ public class PackageHistoryDao {
 			String query = "SELECT * FROM package_histories WHERE package_delivery_id = ? ORDER BY time DESC";
 			stmt = conn.prepareStatement(query);
 			
+			stmt.setInt(1, delivery.getId());
+			
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {

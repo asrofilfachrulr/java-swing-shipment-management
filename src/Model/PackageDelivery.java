@@ -2,6 +2,10 @@ package Model;
 
 import java.util.List;
 
+import Model.Dao.DeliveryRequestDao;
+import Model.Dao.PackageDeliveryDao;
+import Model.Dao.PackageHistoryDao;
+
 public class PackageDelivery extends BasePackageInformation {
 	int id;
 	int staffId;
@@ -19,17 +23,18 @@ public class PackageDelivery extends BasePackageInformation {
 		this.packageHistories = packageHistories;
 	}
 
-	public PackageDelivery(DeliveryRequest deliveryRequest, int id, String status, int staffId, List<PackageHistory> packageHistories) {
-	    super(deliveryRequest.getSenderName(), deliveryRequest.getSenderPhone(), deliveryRequest.getSenderAddress(),
-	            deliveryRequest.getRecipientName(), deliveryRequest.getRecipientPhone(), deliveryRequest.getRecipientAddress(),
-	            deliveryRequest.getWeight(), deliveryRequest.getIsFragile(), deliveryRequest.getStuffDesc());
-	    this.id = id;
-	    this.status = status;
-	    this.staffId = staffId;
-	    this.packageHistories = packageHistories;
+	public PackageDelivery(DeliveryRequest deliveryRequest, int id, String status, int staffId,
+			List<PackageHistory> packageHistories) {
+		super(deliveryRequest.getSenderName(), deliveryRequest.getSenderPhone(), deliveryRequest.getSenderAddress(),
+				deliveryRequest.getRecipientName(), deliveryRequest.getRecipientPhone(),
+				deliveryRequest.getRecipientAddress(), deliveryRequest.getWeight(), deliveryRequest.getIsFragile(),
+				deliveryRequest.getStuffDesc());
+		this.id = id;
+		this.status = status;
+		this.staffId = staffId;
+		this.packageHistories = packageHistories;
 	}
 
-	
 	public int getStaffId() {
 		return staffId;
 	}
