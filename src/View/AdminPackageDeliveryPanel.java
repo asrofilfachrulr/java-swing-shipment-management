@@ -34,8 +34,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JCheckBox;
 
 public class AdminPackageDeliveryPanel extends NavContentPanel {
 	private JTextField tfPackageId;
@@ -51,8 +53,10 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 	private JRadioButton rdbtnLocal;
 	private JRadioButton rdbtnForeign;
 	private JComboBox<String> cbPlaceType;
+	private JCheckBox cbRecipient;
+	private	JButton btnRefresh;
 	
-	private final String[] placeName = {"RECIPIENT", "DROP CENTER", "WAREHOUSE", "HUB"};
+	private final String[] placeName = {"Recipient", "Drop Center", "Warehouse", "Hub"};
 	
 	public AdminPackageDeliveryPanel(MainFrame mainFrame, JPanel prevPanel) {
 		super(mainFrame, prevPanel);
@@ -76,6 +80,10 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 		btnDetail.setEnabled(false);
 		btnDetail.addActionListener(e -> detailAction());
 		
+		btnRefresh = new JButton("Refresh");
+		btnRefresh.setEnabled(false);
+		btnRefresh.addActionListener(e -> refreshAction());
+		
 		GroupLayout groupLayout = new GroupLayout(contentPane);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -90,7 +98,10 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED, 2, Short.MAX_VALUE)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnDetail, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnDetail, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(tfPackageId, GroupLayout.PREFERRED_SIZE, 433, GroupLayout.PREFERRED_SIZE)
 									.addGap(18)
@@ -109,7 +120,9 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 						.addComponent(tfPackageId, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(btnDetail, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnDetail, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnRefresh, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 313, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(57, Short.MAX_VALUE))
@@ -151,6 +164,7 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 		cbPlaceType.setModel(cbModel);
 		
 		JLabel lblNewLabel_5 = new JLabel("To:");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.TRAILING);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Location");
 		lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -181,45 +195,45 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(e -> resetAction());
 		
+		cbRecipient = new JCheckBox("at Recipient?");
+		
 		GroupLayout gl_updateTab = new GroupLayout(updateTab);
 		gl_updateTab.setHorizontalGroup(
 			gl_updateTab.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_updateTab.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_updateTab.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_updateTab.createSequentialGroup()
-							.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnCommit, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-							.addGap(34))
 						.addGroup(gl_updateTab.createSequentialGroup()
-							.addGroup(gl_updateTab.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_3_1, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_updateTab.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_updateTab.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_updateTab.createSequentialGroup()
-									.addGap(8)
+									.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnCommit, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_updateTab.createSequentialGroup()
+									.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
 									.addGroup(gl_updateTab.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_updateTab.createSequentialGroup()
+											.addComponent(rbDepart)
+											.addGap(18)
+											.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
+											.addComponent(cbPlaceType, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
 										.addGroup(gl_updateTab.createSequentialGroup()
 											.addComponent(rdbtnReceive, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addGroup(gl_updateTab.createParallelGroup(Alignment.LEADING)
 												.addComponent(lblNewLabel_2)
-												.addGroup(gl_updateTab.createSequentialGroup()
-													.addComponent(rbDepart)
-													.addGap(18)
-													.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.UNRELATED)
-													.addComponent(cbPlaceType, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
+												.addComponent(cbRecipient)))
 										.addGroup(gl_updateTab.createSequentialGroup()
 											.addComponent(rdbtnLocal, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(rdbtnForeign, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))))
-								.addGroup(gl_updateTab.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(tfTime, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)))
-							.addContainerGap(146, Short.MAX_VALUE))))
+											.addComponent(rdbtnForeign, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+										.addComponent(tfTime, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
+									.addGap(161)))
+							.addGap(34))
+						.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_3_1, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)))
 		);
 		gl_updateTab.setVerticalGroup(
 			gl_updateTab.createParallelGroup(Alignment.LEADING)
@@ -230,23 +244,26 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 					.addGroup(gl_updateTab.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_3)
 						.addComponent(rdbtnReceive)
+						.addComponent(cbRecipient))
+					.addGap(18)
+					.addGroup(gl_updateTab.createParallelGroup(Alignment.BASELINE)
 						.addComponent(rbDepart)
 						.addComponent(lblNewLabel_5)
 						.addComponent(cbPlaceType, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGap(27)
 					.addGroup(gl_updateTab.createParallelGroup(Alignment.BASELINE)
-						.addComponent(rdbtnForeign)
 						.addComponent(lblNewLabel_3_1)
-						.addComponent(rdbtnLocal))
-					.addGap(26)
+						.addComponent(rdbtnLocal)
+						.addComponent(rdbtnForeign))
+					.addGap(18)
 					.addGroup(gl_updateTab.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_4)
 						.addComponent(tfTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(47)
+					.addGap(20)
 					.addGroup(gl_updateTab.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCommit, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnReset, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(39, Short.MAX_VALUE))
+					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		updateTab.setLayout(gl_updateTab);
 		contentPane.setLayout(groupLayout);
@@ -257,6 +274,7 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 	public void init() {
 		tfPackageId.setText("");
 		btnDetail.setEnabled(false);
+		btnRefresh.setEnabled(false);
 		
 		model = getInitModel();
 		initTable();
@@ -268,7 +286,11 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 		frame.init();
 		frame.showFrame();
 	}
-
+	
+	private void refreshAction() {
+		searchAction();
+	}
+	
 	private void searchAction() {
 		if(tfPackageId.getText().isBlank()) {
 			JOptionPane.showMessageDialog(null, "Fill all fields!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -300,6 +322,7 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 				
 				loadDataToTable();
 				btnDetail.setEnabled(true);
+				btnRefresh.setEnabled(true);
 				resetAction();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -371,6 +394,7 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 		rdbtnLocal.setSelected(false);
 		rdbtnReceive.setSelected(false);
 		cbPlaceType.setSelectedIndex(-1);
+		cbRecipient.setSelected(false);
 		
 		cbPlaceType.setEnabled(false);
 		rdbtnLocal.setEnabled(false);
@@ -378,6 +402,56 @@ public class AdminPackageDeliveryPanel extends NavContentPanel {
 	}
 	
 	private void commitAction() {
+		if(delivery == null) return;
 		
+		String type, placeDepart = null, location= null;
+		final boolean atRecipient = cbRecipient.isSelected();
+		
+		if(rdbtnReceive.isSelected()) {
+			type = "Receive";
+		} else if (rbDepart.isSelected()) {
+			type = "Depart";
+		} else {
+			JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		if(rbDepart.isSelected()) {
+			if(cbPlaceType.getSelectedIndex() == -1) {
+				JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			if((!rdbtnLocal.isSelected()) && (!rdbtnForeign.isSelected())) {
+				JOptionPane.showMessageDialog(null, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			placeDepart = (String) cbPlaceType.getSelectedItem();
+			location = rdbtnLocal.isSelected() ? "Local" : "Foreign";
+		}
+		
+		Staff staff = (Staff) mainFrame.getStore().getAccount();
+		
+		final String finalPlaceDepart = placeDepart;
+		final String finalLocation = location;
+		
+		LoadingDialog loadingDialog = new LoadingDialog();
+		loadingDialog.showDialogAndRun("Search", "Searching data", () -> {
+			try {
+				staff.getPackageManagement().addHistory(
+						type, 
+						atRecipient, 
+						finalPlaceDepart, 
+						finalLocation, 
+						new Date(), 
+						delivery.getId(),
+						staff
+					);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		});
 	}
 }

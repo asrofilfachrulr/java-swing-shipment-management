@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import Model.Dao.DeliveryRequestDao;
@@ -47,6 +48,44 @@ public class StaffPackageManagement extends PackageManagement{
     			);
     	
     	PackageHistoryDao daoHistory = new PackageHistoryDao();
-    	daoHistory.create(history, id);
+    	daoHistory.add(history, id);
+    }
+    
+    public void addHistory(
+    		String type, 
+    		boolean atRecipient,
+    		String placeDepart, 
+    		String locationType,
+    		Date date, 
+    		int id, 
+    		Staff staff
+    	) throws Exception {
+    	String status, location, description;
+    	
+    	HashMap<String, String> officeAbbrFullMap = new HashMap<>();
+    	officeAbbrFullMap.put("HUB", "Hub");
+    	officeAbbrFullMap.put("WH", "Warehouse");
+    	officeAbbrFullMap.put("DC", "Drop Center");
+    	
+    	location = String.format("%s %s", staff.getOfficeCity(), staff.getOfficeType());
+    	
+    	if(type.equals("Receive")) {
+    		status = "RECEIVED";
+    		if(atRecipient) {
+    			description = "Package has been received by recipient";
+    			location = "RECIPIENT";
+    		}
+    		else {
+    			description = String.format("Package has been received at local %s", officeAbbrFullMap.get(staff.getOfficeType()));
+    		}
+    	} else {
+    		status = "DEPARTED";
+    		description = String.format("Package has been departed to %s %s",
+    				locationType.equals("Local") ? "local" : "other", placeDepart);
+    	}
+    	
+    	PackageHistory history = new PackageHistory(-1, date, status, location, description, staff.getId());
+    	PackageHistoryDao dao = new PackageHistoryDao();
+    	dao.add(history, id);
     }
 }

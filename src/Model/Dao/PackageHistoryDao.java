@@ -61,7 +61,7 @@ public class PackageHistoryDao {
         return histories;
 	}
 	
-	public void create(PackageHistory history, int deliveryId) throws Exception {
+	public void add(PackageHistory history, int deliveryId) throws Exception {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
