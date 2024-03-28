@@ -7,19 +7,6 @@ import Model.Dao.PackageDeliveryDao;
 import Model.Dao.PackageHistoryDao;
 
 public abstract class PackageManagement {
-
-    public PackageDelivery searchPackageDeliveryById(int id) {
-    	return null;
-    }
-    
-    public DeliveryRequest searchDeliveryRequestById(int id) {
-    	return null;
-	}
-
-	public List<PackageDelivery> searchPackageDeliveriesByOwner(int ownerId) {
-		return null;
-	}
-	
 	public PackageDelivery fetchPackageDeliveryByDeliveryRequest(DeliveryRequest request) throws Exception {
 		if(request.getPickupTime() == null)
 			return null;

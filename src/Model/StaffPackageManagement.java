@@ -25,13 +25,10 @@ public class StaffPackageManagement extends PackageManagement{
     	DeliveryRequestDao dao = new DeliveryRequestDao();
     	dao.updatePickup(requestId, date);
     }
-
-    public void changePackageDelivery(String id, PackageDelivery packageDelivery){
-
-    }
-
-    public void deletePackageDelivery(String id){
-
+    
+    public DeliveryRequest fetchDeliveryRequestByDeliveryId(int id) throws Exception {
+    	DeliveryRequestDao dao = new DeliveryRequestDao();
+    	return dao.getByDeliveryId(id);
     }
 
     public void createPackageDelivery(DeliveryRequest deliveryRequest, Staff staff) throws Exception{
